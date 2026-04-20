@@ -77,6 +77,7 @@
     }
 
     .nav-links a {
+      position: relative;
       font-size: 0.82rem;
       font-weight: 500;
       letter-spacing: 0.06em;
@@ -85,7 +86,32 @@
       transition: color var(--transition);
     }
 
-    .nav-links a:hover { color: var(--green); }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.45rem;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--green), var(--purple));
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active,
+    .nav-links a[aria-current='page'] {
+      color: var(--green);
+    }
+
+    .nav-links a.active::after,
+    .nav-links a[aria-current='page']::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
 
     .nav-toggle {
       display: none;
@@ -293,6 +319,7 @@
     /* ─── Section common ─────────────────────────────────────── */
     section {
       padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 8vw, 8rem);
+      scroll-margin-top: 84px;
     }
 
     .section-label {
@@ -814,7 +841,7 @@
         <p class="hero-title">Software Developer // C++ &amp; Qt</p>
         <p class="hero-desc">
           Self-taught developer building robust desktop applications with C++ and Qt.
-          Passionate about clean architecture, quality assurance, and open-source projects
+          Comfortable working with clean architecture, MVC, MVVM, quality assurance, and open-source projects
           that make a real difference.
         </p>
         <div class="hero-cta">
@@ -1207,17 +1234,93 @@
   <!-- ─── Scripts ───────────────────────────────────── -->
   <script>
     // Mobile nav toggle
+    const nav = document.querySelector('nav');
     const toggle = document.getElementById('navToggle');
     const links  = document.getElementById('navLinks');
+    const navAnchors = Array.from(links.querySelectorAll('a[href^="#"]'));
+    const trackedSections = navAnchors
+      .map(anchor => document.querySelector(anchor.getAttribute('href')))
+      .filter(Boolean);
+    let activeSectionId = '';
+    let isScrollTicking = false;
 
     toggle.addEventListener('click', () => {
       links.classList.toggle('open');
     });
 
     // Close nav on link click (mobile)
+    const setActiveNavLink = (sectionId) => {
+      if (activeSectionId === sectionId) {
+        return;
+      }
+
+      activeSectionId = sectionId;
+
+      navAnchors.forEach(anchor => {
+        const isActive = sectionId !== '' && anchor.getAttribute('href') === `#${sectionId}`;
+        anchor.classList.toggle('active', isActive);
+
+        if (isActive) {
+          anchor.setAttribute('aria-current', 'page');
+          return;
+        }
+
+        anchor.removeAttribute('aria-current');
+      });
+    };
+
+    const updateActiveSection = () => {
+      if (!trackedSections.length) {
+        return;
+      }
+
+      const navHeight = nav ? nav.offsetHeight : 0;
+      const activationLine = navHeight + (window.innerHeight * 0.3);
+      const firstSection = trackedSections[0];
+
+      if (window.scrollY + activationLine < firstSection.offsetTop) {
+        setActiveNavLink('');
+        return;
+      }
+
+      let currentSectionId = firstSection.id;
+
+      trackedSections.forEach(section => {
+        if (section.getBoundingClientRect().top <= activationLine) {
+          currentSectionId = section.id;
+        }
+      });
+
+      const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
+      if (window.scrollY >= maxScrollY - 4) {
+        currentSectionId = trackedSections[trackedSections.length - 1].id;
+      }
+
+      setActiveNavLink(currentSectionId);
+    };
+
+    const scheduleActiveSectionUpdate = () => {
+      if (isScrollTicking) {
+        return;
+      }
+
+      isScrollTicking = true;
+      window.requestAnimationFrame(() => {
+        updateActiveSection();
+        isScrollTicking = false;
+      });
+    };
+
     links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => links.classList.remove('open'));
+      a.addEventListener('click', () => {
+        const targetId = a.getAttribute('href')?.slice(1) || '';
+        setActiveNavLink(targetId);
+        links.classList.remove('open');
+      });
     });
+
+    window.addEventListener('scroll', scheduleActiveSectionUpdate, { passive: true });
+    window.addEventListener('resize', scheduleActiveSectionUpdate);
 
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
@@ -1242,6 +1345,8 @@
         el.style.transitionDelay = `${i * 0.06}s`;
       });
     });
+
+    updateActiveSection();
   </script>
 </body>
 </html>
