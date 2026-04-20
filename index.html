@@ -23,6 +23,9 @@
       --text:      #d1dce8;
       --muted:     #4e6070;
       --heading:   #f0f6ff;
+      --smoke-green: rgba(10, 255, 157, 0.08);
+      --smoke-purple: rgba(124, 106, 247, 0.09);
+      --smoke-white: rgba(240, 246, 255, 0.035);
       --mono:      'Fira Code', monospace;
       --sans:      'Inter', sans-serif;
       --radius:    10px;
@@ -319,7 +322,48 @@
     /* ─── Section common ─────────────────────────────────────── */
     section {
       padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 8vw, 8rem);
+      position: relative;
       scroll-margin-top: 84px;
+    }
+
+    section:not(#hero) {
+      isolation: isolate;
+    }
+
+    section:not(#hero) > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    section:not(#hero)::before,
+    section:not(#hero)::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 180px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    section:not(#hero)::before {
+      top: -90px;
+      background:
+        radial-gradient(60% 110% at 18% 50%, var(--smoke-green) 0%, transparent 68%),
+        radial-gradient(55% 120% at 82% 50%, var(--smoke-purple) 0%, transparent 72%),
+        radial-gradient(45% 90% at 50% 50%, var(--smoke-white) 0%, transparent 70%);
+      filter: blur(34px);
+      opacity: 0.95;
+    }
+
+    section:not(#hero)::after {
+      bottom: -90px;
+      background:
+        radial-gradient(50% 100% at 24% 50%, var(--smoke-white) 0%, transparent 72%),
+        radial-gradient(55% 110% at 76% 50%, var(--smoke-green) 0%, transparent 72%),
+        radial-gradient(60% 120% at 50% 50%, var(--smoke-purple) 0%, transparent 78%);
+      filter: blur(42px);
+      opacity: 0.72;
     }
 
     .section-label {
