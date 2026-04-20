@@ -59,7 +59,8 @@
       z-index: 100;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
+      gap: 1.25rem;
       padding: 0 clamp(1.5rem, 5vw, 4rem);
       height: 60px;
       background: rgba(8, 13, 24, 0.85);
@@ -76,7 +77,53 @@
 
     .nav-links {
       display: flex;
+      align-items: center;
       gap: 2rem;
+      margin-left: auto;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-left: 1rem;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.15rem;
+      padding: 0.25rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: 0;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), transform var(--transition);
+    }
+
+    .lang-btn:hover {
+      color: var(--heading);
+    }
+
+    .lang-btn.active {
+      background: var(--green-dim);
+      color: var(--green);
+    }
+
+    .lang-btn:focus-visible {
+      outline: 1px solid var(--green);
+      outline-offset: 2px;
     }
 
     .nav-links a {
@@ -843,6 +890,10 @@
 
       .nav-links.open { display: flex; }
 
+      .nav-actions {
+        margin-left: auto;
+      }
+
       .nav-toggle { display: flex; }
     }
 
@@ -871,8 +922,14 @@
       <li><a href="#education">Education</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <div class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
+    <div class="nav-actions">
+      <div class="lang-switch" role="group" aria-label="Language selector">
+        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" class="lang-btn" data-lang="pt" aria-pressed="false">PT</button>
+      </div>
+      <div class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </div>
     </div>
   </nav>
 
@@ -884,9 +941,9 @@
         <h1 class="hero-name">Bruno<br/><span>Silva</span></h1>
         <p class="hero-title">Software Developer // C++ &amp; Qt</p>
         <p class="hero-desc">
-          Self-taught developer building robust desktop applications with C++ and Qt.
-          Comfortable working with clean architecture, MVC, MVVM, quality assurance, and open-source projects
-          that make a real difference.
+          Self-taught software developer focused on building robust desktop applications with C++ and Qt.
+          Practical, persistent, and comfortable working with clean architecture, MVC, MVVM, software quality,
+          and open-source projects.
         </p>
         <div class="hero-cta">
           <a href="#experience" class="btn btn-primary">View my journey</a>
@@ -896,7 +953,7 @@
         </div>
         <div class="hero-scroll">
           <span class="scroll-line"></span>
-          scroll to explore
+          <span class="hero-scroll-text">scroll to explore</span>
         </div>
       </div>
       <div class="hero-photo-wrap">
@@ -914,21 +971,21 @@
     <div class="about-grid">
       <div class="about-text reveal">
         <p>
-          I started my professional journey in 2016, working in production and technical support roles.
-          Over time I built a strong foundation in hardware, support, and manual testing — skills that
-          later made me a better developer.
+          I began my professional journey in 2016, working in production and technical support roles.
+          Over time, I built a strong foundation in hardware, support, and manual testing.
         </p>
         <p>
-          In 2018 I stepped into the role of Manual Software Tester, sharpening my eye for detail and
-          learning to communicate clearly with development teams. My curiosity for programming kept
-          growing until 2023, when I fully committed to the transition — first as a trainee, and now
-          as a Software Developer focused on C++ and Qt.
+          In 2018, I took on the role of Manual Software Tester, where I developed key skills in
+          functional validation, test plan creation, and communication with development teams. In 2023,
+          I embraced the challenge of transitioning into software development — first as a trainee,
+          and now as a Software Developer focusing on C++ and Qt.
         </p>
         <p>
-          In my free time I work on personal projects in C — building apps for Arduino, Raspberry Pi,
-          and Linux desktops using GTK+. One of them is <strong style="color: var(--heading);">OnDay</strong>,
-          an independent cross-platform desktop solution.
-          I am self-taught, practical, and persistent — always hunting for the next challenge.
+          In my free time, I dedicate myself to personal projects in C, working with Arduino,
+          Raspberry Pi, and GTK+ — including <strong style="color: var(--heading);">OnDay</strong>, an independent
+          project offering cross-platform desktop solutions for Windows and Ubuntu. I am a self-taught,
+          practical, and persistent professional, always looking for new challenges that allow me to
+          grow in both software development and software quality.
         </p>
       </div>
 
@@ -944,10 +1001,10 @@
           <div class="t-val">C / C++ · Qt / QML · GTK3 · SQLite</div>
           <br/>
           <div><span class="t-prompt">$ </span><span class="t-cmd">echo $PREFERENCE</span></div>
-          <div class="t-val">Backend &gt; Frontend (but I'll make the UI behave)</div>
+          <div class="t-val terminal-preference">Backend &gt; Frontend (but I'll make the UI behave)</div>
           <br/>
           <div><span class="t-prompt">$ </span><span class="t-cmd">echo $TARGET</span></div>
-          <div class="t-val">Desktop first → same app, mobile next (Qt/QML)</div>
+          <div class="t-val terminal-target">Desktop first → same app, mobile next (Qt/QML)</div>
           <br/>
           <div><span class="t-prompt">$ </span><span class="t-cmd">ls -la featured/</span></div>
           <div class="t-out">drwxr-xr-x  OnDay              → <a href="https://onday.pt" target="_blank" rel="noopener" style="color: var(--green);">onday.pt</a></div>
@@ -972,11 +1029,12 @@
         <div class="timeline-role">Software Developer</div>
         <div class="timeline-company">SDILAB · Braga, Portugal</div>
         <ul class="timeline-desc">
-          <li>Developed software solutions using C++ and the Qt framework for graphical interfaces and cross-platform applications.</li>
-          <li>Conducted technical research and gathered requirements from stakeholders to implement new features.</li>
-          <li>Ensured test coverage at unit, module, process, and system levels.</li>
-          <li>Led the Quality Assurance process, fostering a testing culture across all development stages.</li>
-          <li>Coordinated delivery quality initiatives, collaborating with the Customer Support team for final validation.</li>
+          <li>Developed software solutions using the C++ programming language.</li>
+          <li>Leveraged the Qt framework to build graphical interfaces and cross-platform applications.</li>
+          <li>Conducted technical research and gathered requirements from stakeholders to support the implementation of new features.</li>
+          <li>Ensured the implementation of tests at the unit, module, process, and system levels.</li>
+          <li>Led the Quality Assurance process, fostering a testing culture throughout all stages of development.</li>
+          <li>Coordinated initiatives to improve delivery quality, ensuring solution robustness and collaborating with the Customer Support team for alignment and final validation.</li>
         </ul>
       </div>
 
@@ -985,9 +1043,9 @@
         <div class="timeline-role">Software Developer · Trainee</div>
         <div class="timeline-company">SDILAB · Braga, Portugal</div>
         <ul class="timeline-desc">
-          <li>Developed automated scripts to create OS images for ARM-based platforms.</li>
-          <li>Supported C, C++, and Python development tasks including image injection procedures.</li>
-          <li>Led software validation for Qt6 migration and compatibility across market products.</li>
+          <li>Developed automated scripts to create operating system images for ARM-based platforms.</li>
+          <li>Supported C, C++, and Python development tasks, including implementing procedures and tools for injecting images into devices.</li>
+          <li>Played a key role in software validation, focusing on the migration and compatibility of applications converted to Qt6 from various market products.</li>
         </ul>
       </div>
 
@@ -996,9 +1054,11 @@
         <div class="timeline-role">Software Developer · Freelancer</div>
         <div class="timeline-company">Independent · Remote</div>
         <ul class="timeline-desc">
-          <li>Full-cycle software development — from concept and requirements analysis to delivery and post-launch support.</li>
-          <li>Project management: deadlines, quality, and alignment with client objectives.</li>
-          <li>Produced functional and technical documentation, plus data analysis to support decisions.</li>
+          <li>Full-cycle software development, from concept to implementation.</li>
+          <li>Requirements analysis and definition in collaboration with the client.</li>
+          <li>Project management, ensuring deadlines, quality, and alignment with objectives.</li>
+          <li>Provided technical support and post-delivery follow-up.</li>
+          <li>Produced functional and technical documentation, as well as data analysis to support decision-making.</li>
           <li>Developed the product website and related web presence as an additional deliverable.</li>
         </ul>
       </div>
@@ -1009,29 +1069,30 @@
         <div class="timeline-company">SDILAB · Braga, Portugal</div>
         <ul class="timeline-desc">
           <li>Prepared and documented test plans for specific features.</li>
-          <li>Executed defined tests and validated results.</li>
-          <li>Communicated outcomes to the development team, contributing to software refinement.</li>
+          <li>Executed defined tests and validated the results.</li>
+          <li>Communicated test outcomes to the development team, contributing to software refinement and ongoing improvement.</li>
         </ul>
       </div>
 
       <div class="timeline-item reveal">
         <div class="timeline-period">11 / 2017 — 11 / 2018</div>
-        <div class="timeline-role">Customer Support Technician</div>
+        <div class="timeline-role">Customer Support</div>
         <div class="timeline-company">Balanças Marques · Braga, Portugal</div>
         <ul class="timeline-desc">
-          <li>Delivered technical support on-site and remotely, ensuring timely problem resolution.</li>
-          <li>Conducted manual testing of equipment and software, identifying functional issues.</li>
-          <li>Carried out repairs and maintenance on electronic equipment.</li>
+          <li>Delivered technical support to clients both on-site and remotely, ensuring timely and effective problem resolution.</li>
+          <li>Conducted manual testing of equipment and software, accurately identifying and diagnosing functional issues.</li>
+          <li>Carried out repairs and maintenance on electronic equipment, ensuring full operational functionality and compliance with technical standards.</li>
         </ul>
       </div>
 
       <div class="timeline-item reveal">
         <div class="timeline-period">09 / 2016 — 11 / 2017</div>
-        <div class="timeline-role">Production Operator</div>
+        <div class="timeline-role">Production Operator · Commercial Scales</div>
         <div class="timeline-company">Balanças Marques · Braga, Portugal</div>
         <ul class="timeline-desc">
-          <li>Assembled commercial scales used in retail businesses; supported various production stages.</li>
-          <li>Packaged and secured finished products, maintaining quality and transport standards.</li>
+          <li>Gathered and prepared materials for assembling scales used in grocery stores, fish markets, butcher shops, and other retail businesses.</li>
+          <li>Supported various stages of production and carried out the technical assembly of equipment.</li>
+          <li>Packaged and secured finished products, maintaining quality standards and ensuring safe transport.</li>
         </ul>
       </div>
 
@@ -1271,7 +1332,7 @@
       ~/ <span>Bruno Silva</span> · Vila Verde, Portugal
     </div>
     <div class="footer-right">
-      Built with HTML &amp; CSS · <span style="color: var(--green);">2026</span>
+      <span class="footer-built-with">Built with HTML &amp; CSS</span> · <span style="color: var(--green);">2026</span>
     </div>
   </footer>
 
@@ -1281,15 +1342,275 @@
     const nav = document.querySelector('nav');
     const toggle = document.getElementById('navToggle');
     const links  = document.getElementById('navLinks');
+    const languageSwitch = document.querySelector('.lang-switch');
+    const languageButtons = Array.from(document.querySelectorAll('.lang-btn'));
     const navAnchors = Array.from(links.querySelectorAll('a[href^="#"]'));
     const trackedSections = navAnchors
       .map(anchor => document.querySelector(anchor.getAttribute('href')))
       .filter(Boolean);
+    const languageStorageKey = 'portfolio-language';
     let activeSectionId = '';
     let isScrollTicking = false;
 
+    const translations = {
+      en: {
+        meta: {
+          title: 'Bruno Silva · Software Developer',
+          toggleMenuLabel: 'Toggle menu',
+          languageSelectorLabel: 'Language selector'
+        },
+        text: {
+          '.nav-links a[href="#about"]': 'About',
+          '.nav-links a[href="#experience"]': 'Experience',
+          '.nav-links a[href="#skills"]': 'Skills',
+          '.nav-links a[href="#projects"]': 'Projects',
+          '.nav-links a[href="#education"]': 'Education',
+          '.nav-links a[href="#contact"]': 'Contact',
+          '#hero .hero-label': "Hello, world. I'm",
+          '#hero .hero-title': 'Software Developer // C++ & Qt',
+          '#hero .hero-desc': 'Self-taught software developer focused on building robust desktop applications with C++ and Qt. Practical, persistent, and comfortable working with clean architecture, MVC, MVVM, software quality, and open-source projects.',
+          '#hero .hero-cta .btn-primary': 'View my journey',
+          '#hero .hero-cta a[href="#contact"]': 'Get in touch',
+          '#hero .hero-scroll-text': 'scroll to explore',
+          '#about .section-title': 'About me',
+          '#about .about-text p:nth-child(1)': 'I began my professional journey in 2016, working in production and technical support roles. Over time, I built a strong foundation in hardware, support, and manual testing.',
+          '#about .about-text p:nth-child(2)': 'In 2018, I took on the role of Manual Software Tester, where I developed key skills in functional validation, test plan creation, and communication with development teams. In 2023, I embraced the challenge of transitioning into software development — first as a trainee, and now as a Software Developer focusing on C++ and Qt.',
+          '#about .terminal-preference': "Backend > Frontend (but I'll make the UI behave)",
+          '#about .terminal-target': 'Desktop first → same app, mobile next (Qt/QML)',
+          '#experience .section-title': 'Work Experience',
+          '#experience .timeline-item:nth-child(1) .timeline-period': '01/2024 — Current',
+          '#experience .timeline-item:nth-child(1) .timeline-role': 'Software Developer',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(1)': 'Developed software solutions using the C++ programming language.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(2)': 'Leveraged the Qt framework to build graphical interfaces and cross-platform applications.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(3)': 'Conducted technical research and gathered requirements from stakeholders to support the implementation of new features.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(4)': 'Ensured the implementation of tests at the unit, module, process, and system levels.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(5)': 'Led the Quality Assurance process, fostering a testing culture throughout all stages of development.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(6)': 'Coordinated initiatives to improve delivery quality, ensuring solution robustness and collaborating with the Customer Support team for alignment and final validation.',
+          '#experience .timeline-item:nth-child(2) .timeline-role': 'Software Developer · Trainee',
+          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(1)': 'Developed automated scripts to create operating system images for ARM-based platforms.',
+          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(2)': 'Supported C, C++, and Python development tasks, including implementing procedures and tools for injecting images into devices.',
+          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(3)': 'Played a key role in software validation, focusing on the migration and compatibility of applications converted to Qt6 from various market products.',
+          '#experience .timeline-item:nth-child(3) .timeline-period': '01/2021 — Current',
+          '#experience .timeline-item:nth-child(3) .timeline-role': 'Software Developer · Freelancer',
+          '#experience .timeline-item:nth-child(3) .timeline-company': 'Independent · Remote',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(1)': 'Full-cycle software development, from concept to implementation.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(2)': 'Requirements analysis and definition in collaboration with the client.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(3)': 'Project management, ensuring deadlines, quality, and alignment with objectives.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(4)': 'Provided technical support and post-delivery follow-up.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(5)': 'Produced functional and technical documentation, as well as data analysis to support decision-making.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(6)': 'Developed the product website and related web presence as an additional deliverable.',
+          '#experience .timeline-item:nth-child(4) .timeline-role': 'Manual Software Tester',
+          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(1)': 'Prepared and documented test plans for specific features.',
+          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(2)': 'Executed defined tests and validated the results.',
+          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(3)': 'Communicated test outcomes to the development team, contributing to software refinement and ongoing improvement.',
+          '#experience .timeline-item:nth-child(5) .timeline-role': 'Customer Support',
+          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(1)': 'Delivered technical support to clients both on-site and remotely, ensuring timely and effective problem resolution.',
+          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(2)': 'Conducted manual testing of equipment and software, accurately identifying and diagnosing functional issues.',
+          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(3)': 'Carried out repairs and maintenance on electronic equipment, ensuring full operational functionality and compliance with technical standards.',
+          '#experience .timeline-item:nth-child(6) .timeline-role': 'Production Operator · Commercial Scales',
+          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(1)': 'Gathered and prepared materials for assembling scales used in grocery stores, fish markets, butcher shops, and other retail businesses.',
+          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(2)': 'Supported various stages of production and carried out the technical assembly of equipment.',
+          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(3)': 'Packaged and secured finished products, maintaining quality standards and ensuring safe transport.',
+          '#skills .section-title': 'Skills',
+          '#skills .skill-card:nth-child(1) .skill-card-title': '// Languages',
+          '#skills .skill-card:nth-child(2) .skill-card-title': '// Frameworks & Libraries',
+          '#skills .skill-card:nth-child(3) .skill-card-title': '// Storage & Platforms',
+          '#skills .skill-card:nth-child(4) .skill-card-title': '// Quality & Process',
+          '#skills .skill-card:nth-child(5) .skill-card-title': '// Tools',
+          '#skills .skill-card:nth-child(6) .skill-card-title': '// Languages spoken',
+          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(1)': 'Manual Testing',
+          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(2)': 'Test Planning',
+          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(4)': 'Agile Basics',
+          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(5)': 'Technical Docs',
+          '#skills .skill-card:nth-child(6) .skill-tags .tag:nth-child(1)': 'Portuguese (Native)',
+          '#skills .skill-card:nth-child(6) .skill-tags .tag:nth-child(2)': 'English (B2)',
+          '#projects .section-title': 'Projects',
+          '#projects .project-card:nth-child(1) .project-desc': 'An independent cross-platform desktop application offering scheduling and planning solutions for Windows and Ubuntu. Built with C and GTK3, with a Qt/QML sibling (OnDay Pro Planner) under active development.',
+          '#projects .project-card:nth-child(2) .project-desc': 'A free, open-source application that allows users to configure a PIM551 keypad paired with a Raspberry Pi Pico W to execute custom keybinds on their computer. Currently being migrated to Qt/QML + C++.',
+          '#projects .project-card:nth-child(3) .project-desc': 'A warehouse management application featuring inventory control and team operations. Designed desktop-first with a future mobile target via Qt/QML — currently approaching v1.0.',
+          '#projects .project-card:nth-child(3) .skill-tags .tag:nth-child(4)': 'In progress',
+          '#projects .project-card:nth-child(3) .project-footer .project-link': 'Coming soon',
+          '#education .section-title': 'Education and Training',
+          '#education .edu-card:nth-child(1) .edu-period': '10/11/2014 — 01/09/2016 · Barcelos, Portugal',
+          '#education .edu-card:nth-child(1) .edu-degree': 'Professional Higher Technical Course in Electronics, Automation and Control',
+          '#education .edu-card:nth-child(1) .edu-level': 'EQF Level 5',
+          '#education .edu-card:nth-child(2) .edu-period': '13/09/2010 — 30/04/2014 · Vila Verde, Portugal',
+          '#education .edu-card:nth-child(2) .edu-degree': 'Management Information Technology Technician',
+          '#education .edu-card:nth-child(2) .edu-level': 'EQF Level 4',
+          '#contact .section-title': 'Get in touch',
+          '#contact .contact-lead': 'Open to interesting projects, collaboration, and new opportunities. Feel free to reach out through any of the channels below.',
+          '.footer-built-with': 'Built with HTML & CSS'
+        },
+        html: {
+          '#about .about-text p:nth-child(3)': 'In my free time, I dedicate myself to personal projects in C, working with Arduino, Raspberry Pi, and GTK+ — including <strong style="color: var(--heading);">OnDay</strong>, an independent project offering cross-platform desktop solutions for Windows and Ubuntu. I am a self-taught, practical, and persistent professional, always looking for new challenges that allow me to grow in both software development and software quality.',
+          '#education .edu-card:nth-child(1) p': 'Socio-Cultural Training Component: Technical English. Scientific Training Component: Fundamentals of Physics, Fundamentals of Mathematics, Discrete Mathematics, and Linear Algebra. Technical Training Component: Automation, Programming, Digital Systems and Microcontrollers, Pneumatic and Hydraulic Systems, and Automation and Robotics Laboratories. Completed an 840-hour internship at Balanças Marques.',
+          '#education .edu-card:nth-child(2) p': 'Socio-Cultural Training Component: Portuguese, English, and Information and Communication Technologies. Scientific Training Component: Economics and Mathematics. Technical Training Component: Programming Languages, Information Systems and Software Applications, and Operating Systems. Completed a 420-hour internship at Escola Básica Integrada Monsenhor Elísio Araújo.'
+        }
+      },
+      pt: {
+        meta: {
+          title: 'Bruno Silva · Programador de Software',
+          toggleMenuLabel: 'Abrir ou fechar menu',
+          languageSelectorLabel: 'Seletor de idioma'
+        },
+        text: {
+          '.nav-links a[href="#about"]': 'Sobre',
+          '.nav-links a[href="#experience"]': 'Experiência',
+          '.nav-links a[href="#skills"]': 'Competências',
+          '.nav-links a[href="#projects"]': 'Projetos',
+          '.nav-links a[href="#education"]': 'Formação',
+          '.nav-links a[href="#contact"]': 'Contacto',
+          '#hero .hero-label': 'Olá, mundo. Sou',
+          '#hero .hero-title': 'Programador de Software // C++ & Qt',
+          '#hero .hero-desc': 'Programador autodidata focado no desenvolvimento de aplicações desktop robustas com C++ e Qt. Habituado a trabalhar com clean architecture, MVC, MVVM, garantia da qualidade e projetos open source orientados para problemas reais.',
+          '#hero .hero-cta .btn-primary': 'Ver percurso',
+          '#hero .hero-cta a[href="#contact"]': 'Entrar em contacto',
+          '#hero .hero-scroll-text': 'faz scroll para explorar',
+          '#about .section-title': 'Sobre mim',
+          '#about .about-text p:nth-child(1)': 'Iniciei o meu percurso profissional em 2016, a desempenhar funções nas áreas da produção e do suporte técnico. Ao longo do tempo, construí uma base sólida em hardware, suporte e testes manuais.',
+          '#about .about-text p:nth-child(2)': 'Em 2018, assumi a função de Testador Manual de Software, onde desenvolvi competências-chave em validação funcional, elaboração de planos de teste e comunicação com equipas de desenvolvimento. Em 2023, abracei o desafio de transitar para o desenvolvimento de software — primeiro como estagiário e, atualmente, como Programador de Software com foco em C++ e Qt.',
+          '#about .terminal-preference': 'Backend > Frontend (mas faço a UI portar-se bem)',
+          '#about .terminal-target': 'Desktop primeiro → a mesma app, mobile depois (Qt/QML)',
+          '#experience .section-title': 'Experiência Profissional',
+          '#experience .timeline-item:nth-child(1) .timeline-period': '01 / 2024 — Atual',
+          '#experience .timeline-item:nth-child(1) .timeline-role': 'Programador de Software',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(1)': 'Desenvolvimento de soluções de software utilizando a linguagem C++.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(2)': 'Utilização da framework Qt para construção de interfaces gráficas e aplicações multiplataforma.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(3)': 'Realização de investigação técnica e levantamento de requisitos junto das partes interessadas, com vista à implementação de novas funcionalidades.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(4)': 'Garantia da implementação de testes ao nível unitário, modular, de processo e de sistema.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(5)': 'Liderança do processo de garantia da qualidade, promovendo uma cultura de testes ao longo de todas as fases de desenvolvimento.',
+          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(6)': 'Coordenação de iniciativas para melhorar a qualidade das entregas, assegurando robustez da solução e articulação com a equipa de Suporte ao Cliente para alinhamento e validação final.',
+          '#experience .timeline-item:nth-child(2) .timeline-role': 'Programador de Software · Estagiário',
+          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(1)': 'Desenvolvimento de scripts automatizados para a criação de imagens de sistemas operativos destinados a plataformas ARM.',
+          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(2)': 'Apoio em tarefas de desenvolvimento em C, C++ e Python, incluindo a implementação de procedimentos e ferramentas para injeção de imagens nos dispositivos.',
+          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(3)': 'Participação no processo de validação do software, com foco na migração e compatibilidade de aplicações convertidas para Qt6 em diferentes produtos do mercado.',
+          '#experience .timeline-item:nth-child(3) .timeline-period': '01 / 2021 — Atual',
+          '#experience .timeline-item:nth-child(3) .timeline-role': 'Programador de Software · Freelancer',
+          '#experience .timeline-item:nth-child(3) .timeline-company': 'Independente · Remoto',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(1)': 'Desenvolvimento integral do software, desde a conceção à implementação.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(2)': 'Análise de necessidades e definição de requisitos junto do cliente.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(3)': 'Gestão do projeto, assegurando prazos, qualidade e alinhamento com os objetivos.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(4)': 'Prestação de suporte técnico e acompanhamento pós-entrega.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(5)': 'Produção de documentação funcional e técnica, bem como análise de dados para apoio à decisão.',
+          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(6)': 'Desenvolvimento do website do produto e presença web associada como entrega complementar.',
+          '#experience .timeline-item:nth-child(4) .timeline-role': 'Testador Manual de Software',
+          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(1)': 'Elaboração e documentação de planos de teste para funcionalidades específicas.',
+          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(2)': 'Execução dos testes definidos e validação dos resultados obtidos.',
+          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(3)': 'Comunicação dos resultados de teste à equipa de desenvolvimento, contribuindo para a correção e melhoria contínua do software.',
+          '#experience .timeline-item:nth-child(5) .timeline-role': 'Apoio ao Cliente',
+          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(1)': 'Prestação de suporte técnico ao cliente, presencial e remoto, para resolução de problemas.',
+          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(2)': 'Realização de testes manuais a equipamentos e software, com identificação e diagnóstico de falhas funcionais.',
+          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(3)': 'Reparação e manutenção de equipamentos eletrónicos, garantindo a sua operacionalidade e conformidade técnica.',
+          '#experience .timeline-item:nth-child(6) .timeline-role': 'Operador de Produção · Balanças Comerciais',
+          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(1)': 'Recolha e preparação de materiais para a montagem de balanças destinadas a frutarias, peixarias, talhos e outros estabelecimentos comerciais, com apoio nas várias fases de produção.',
+          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(2)': 'Apoio nas várias fases de produção e montagem técnica dos equipamentos.',
+          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(3)': 'Embalamento e acondicionamento dos produtos finais, garantindo qualidade e segurança no transporte.',
+          '#skills .section-title': 'Competências',
+          '#skills .skill-card:nth-child(1) .skill-card-title': '// Linguagens de Programação',
+          '#skills .skill-card:nth-child(2) .skill-card-title': '// Frameworks e Bibliotecas',
+          '#skills .skill-card:nth-child(3) .skill-card-title': '// Armazenamento e Plataformas',
+          '#skills .skill-card:nth-child(4) .skill-card-title': '// Qualidade e Processo',
+          '#skills .skill-card:nth-child(5) .skill-card-title': '// Ferramentas',
+          '#skills .skill-card:nth-child(6) .skill-card-title': '// Idiomas',
+          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(1)': 'Testes Manuais',
+          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(2)': 'Planeamento de Testes',
+          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(4)': 'Conhecimentos básicos de Agile',
+          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(5)': 'Documentação Técnica',
+          '#skills .skill-card:nth-child(6) .skill-tags .tag:nth-child(1)': 'Português (Nativo)',
+          '#skills .skill-card:nth-child(6) .skill-tags .tag:nth-child(2)': 'Inglês (B2)',
+          '#projects .section-title': 'Projetos',
+          '#projects .project-card:nth-child(1) .project-desc': 'Uma aplicação desktop independente e multiplataforma orientada para soluções de agendamento e planeamento em Windows e Ubuntu. Desenvolvida em C e GTK3, com uma versão irmã em Qt/QML (OnDay Pro Planner) em desenvolvimento.',
+          '#projects .project-card:nth-child(2) .project-desc': 'Uma aplicação gratuita e open source que permite configurar um keypad PIM551 ligado a um Raspberry Pi Pico W para executar atalhos personalizados no computador. Está atualmente em migração para Qt/QML + C++.',
+          '#projects .project-card:nth-child(3) .project-desc': 'Uma aplicação de gestão de armazém com controlo de inventário e operações de equipa. Pensada primeiro para desktop, com objetivo futuro para mobile via Qt/QML — neste momento a aproximar-se da v1.0.',
+          '#projects .project-card:nth-child(3) .skill-tags .tag:nth-child(4)': 'Em curso',
+          '#projects .project-card:nth-child(3) .project-footer .project-link': 'Em breve',
+          '#education .section-title': 'Educação e Formação',
+          '#education .edu-card:nth-child(1) .edu-period': '10/11/2014 — 01/09/2016 · Barcelos, Portugal',
+          '#education .edu-card:nth-child(1) .edu-degree': 'Técnico Superior Profissional em Electrónica, Automação e Comando',
+          '#education .edu-card:nth-child(1) .edu-level': 'Nível 5 do QEQ',
+          '#education .edu-card:nth-child(2) .edu-period': '13/09/2010 — 30/04/2014 · Vila Verde, Portugal',
+          '#education .edu-card:nth-child(2) .edu-degree': 'Técnico de Informática de Gestão',
+          '#education .edu-card:nth-child(2) .edu-level': 'Nível 4 do QEQ',
+          '#contact .section-title': 'Entrar em contacto',
+          '#contact .contact-lead': 'Aberto a projetos interessantes, colaborações e novas oportunidades. Podes entrar em contacto por qualquer um dos canais abaixo.',
+          '.footer-built-with': 'Construído com HTML & CSS'
+        },
+        html: {
+          '#about .about-text p:nth-child(3)': 'No meu tempo livre, dedico-me a projetos pessoais em C, trabalhando com Arduino, Raspberry Pi e GTK+, incluindo o <strong style="color: var(--heading);">OnDay</strong>, um projeto independente orientado para soluções desktop multiplataforma para Windows e Ubuntu. Sou autodidata, prático e persistente, sempre à procura de novos desafios que me permitam crescer tanto no desenvolvimento de software como na qualidade de software.',
+          '#education .edu-card:nth-child(1) p': 'Componente sócio-cultural: Inglês Técnico. Componente científica: Fundamentos de Física, Fundamentos de Matemática, Matemática Discreta e Álgebra Linear. Componente técnica: Automação, Programação, Sistemas Digitais e Microcontroladores, Sistemas Pneumáticos e Hidráulicos, Laboratórios de Automação e Robótica. Estágio de 840 horas na Balanças Marques.',
+          '#education .edu-card:nth-child(2) p': 'Componente sócio-cultural: Português, Inglês e Tecnologias da Informação e Comunicação. Componente científica: Economia e Matemática. Componente técnica: Linguagens de Programação, Sistemas de Informação e Aplicações Informáticas e Sistemas de Exploração. Estágio de 420 horas na Escola Básica Integrada Monsenhor Elísio Araújo.'
+        }
+      }
+    };
+
+    const applyContentTranslations = (entries, useHtml = false) => {
+      Object.entries(entries).forEach(([selector, value]) => {
+        const element = document.querySelector(selector);
+        if (!element) {
+          return;
+        }
+
+        if (useHtml) {
+          element.innerHTML = value;
+          return;
+        }
+
+        element.textContent = value;
+      });
+    };
+
+    const readStoredLanguage = () => {
+      try {
+        return window.localStorage.getItem(languageStorageKey);
+      } catch {
+        return null;
+      }
+    };
+
+    const storeLanguage = (language) => {
+      try {
+        window.localStorage.setItem(languageStorageKey, language);
+      } catch {
+        // Ignore storage failures and keep the chosen language only for the session.
+      }
+    };
+
+    const applyTranslations = (language) => {
+      const nextLanguage = translations[language] ? language : 'en';
+      const translationSet = translations[nextLanguage];
+
+      document.documentElement.lang = nextLanguage;
+      document.title = translationSet.meta.title;
+      toggle.setAttribute('aria-label', translationSet.meta.toggleMenuLabel);
+
+      if (languageSwitch) {
+        languageSwitch.setAttribute('aria-label', translationSet.meta.languageSelectorLabel);
+      }
+
+      applyContentTranslations(translationSet.text);
+      applyContentTranslations(translationSet.html, true);
+
+      languageButtons.forEach(button => {
+        const isActive = button.dataset.lang === nextLanguage;
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
+      });
+    };
+
+    const storedLanguage = readStoredLanguage();
+    const browserLanguage = navigator.language?.toLowerCase().startsWith('pt') ? 'pt' : 'en';
+    const initialLanguage = translations[storedLanguage] ? storedLanguage : browserLanguage;
+
     toggle.addEventListener('click', () => {
       links.classList.toggle('open');
+    });
+
+    languageButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const nextLanguage = button.dataset.lang;
+        applyTranslations(nextLanguage);
+        storeLanguage(nextLanguage);
+      });
     });
 
     // Close nav on link click (mobile)
@@ -1390,6 +1711,7 @@
       });
     });
 
+    applyTranslations(initialLanguage);
     updateActiveSection();
   </script>
 </body>
