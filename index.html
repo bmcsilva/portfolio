@@ -1,1723 +1,1015 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bruno Silva · Software Developer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    /* ─── Reset & base ─────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:        #080d18;
-      --bg2:       #0d1424;
-      --bg3:       #111827;
-      --border:    #1e2a3a;
-      --green:     #0aff9d;
-      --green-dim: #0aff9d22;
-      --purple:    #7c6af7;
-      --purple-dim:#7c6af722;
-      --text:      #d1dce8;
-      --muted:     #4e6070;
-      --heading:   #f0f6ff;
-      --smoke-green: rgba(10, 255, 157, 0.08);
-      --smoke-purple: rgba(124, 106, 247, 0.09);
-      --smoke-white: rgba(240, 246, 255, 0.035);
-      --mono:      'Fira Code', monospace;
-      --sans:      'Inter', sans-serif;
-      --radius:    10px;
-      --transition: 0.25s ease;
-    }
-
-    html { scroll-behavior: smooth; font-size: 16px; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    ::selection { background: var(--green-dim); color: var(--green); }
-
-    a { color: inherit; text-decoration: none; }
-    ul { list-style: none; }
-
-    /* ─── Scrollbar ─────────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-    /* ─── Nav ───────────────────────────────────────────────── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 1.25rem;
-      padding: 0 clamp(1.5rem, 5vw, 4rem);
-      height: 60px;
-      background: rgba(8, 13, 24, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-family: var(--mono);
-      font-size: 0.9rem;
-      color: var(--green);
-      letter-spacing: 0.05em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: clamp(1rem, 1.8vw, 2rem);
-      margin-left: auto;
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-      margin-left: 1rem;
-    }
-
-    .lang-switch {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.15rem;
-      padding: 0.25rem;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .lang-btn {
-      background: transparent;
-      border: 0;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 0.74rem;
-      letter-spacing: 0.08em;
-      padding: 0.35rem 0.65rem;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: background var(--transition), color var(--transition), transform var(--transition);
-    }
-
-    .lang-btn:hover {
-      color: var(--heading);
-    }
-
-    .lang-btn.active {
-      background: var(--green-dim);
-      color: var(--green);
-    }
-
-    .lang-btn:focus-visible {
-      outline: 1px solid var(--green);
-      outline-offset: 2px;
-    }
-
-    .nav-links a {
-      position: relative;
-      font-size: clamp(0.74rem, 0.18vw + 0.7rem, 0.82rem);
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--muted);
-      transition: color var(--transition);
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -0.45rem;
-      height: 2px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--green), var(--purple));
-      opacity: 0;
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform var(--transition), opacity var(--transition);
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active,
-    .nav-links a[aria-current='page'] {
-      color: var(--green);
-    }
-
-    .nav-links a.active::after,
-    .nav-links a[aria-current='page']::after {
-      opacity: 1;
-      transform: scaleX(1);
-    }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: var(--text);
-      border-radius: 2px;
-      transition: all var(--transition);
-    }
-
-    /* ─── Hero ──────────────────────────────────────────────── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 6rem clamp(1.5rem, 8vw, 8rem) 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-layout {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: clamp(2rem, 5vw, 6rem);
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-photo-wrap {
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .hero-photo-wrap::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background: conic-gradient(var(--green), var(--purple), var(--green));
-      animation: spinBorder 6s linear infinite;
-      z-index: -1;
-    }
-
-    @keyframes spinBorder {
-      to { transform: rotate(360deg); }
-    }
-
-    .hero-photo {
-      width: clamp(180px, 18vw, 260px);
-      height: clamp(180px, 18vw, 260px);
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: center top;
-      display: block;
-      border: 4px solid var(--bg);
-      position: relative;
-      z-index: 1;
-    }
-
-    #hero::before {
-      content: '';
-      position: absolute;
-      top: -200px; right: -200px;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(10,255,157,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    #hero::after {
-      content: '';
-      position: absolute;
-      bottom: -100px; left: -100px;
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(124,106,247,0.07) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      flex: 1 1 42rem;
-      max-width: 42rem;
-      min-width: 0;
-    }
-
-    .hero-label {
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      color: var(--green);
-      letter-spacing: 0.1em;
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .hero-label::before {
-      content: '';
-      display: inline-block;
-      width: 28px;
-      height: 1px;
-      background: var(--green);
-    }
-
-    .hero-name {
-      font-size: clamp(2.8rem, 7vw, 5rem);
-      font-weight: 700;
-      color: var(--heading);
-      line-height: 1.1;
-      margin-bottom: 0.4rem;
-      letter-spacing: -0.02em;
-    }
-
-    .hero-name span { color: var(--green); }
-
-    .hero-title {
-      font-size: clamp(1.2rem, 3vw, 1.6rem);
-      font-weight: 300;
-      color: var(--muted);
-      margin-bottom: 1.8rem;
-      font-family: var(--mono);
-    }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      color: var(--text);
-      max-width: 560px;
-      margin-bottom: 2.5rem;
-      opacity: 0.85;
-    }
-
-    .hero-cta {
-      display: flex;
-      width: 100%;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.6rem;
-      border-radius: var(--radius);
-      font-size: 0.88rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      transition: all var(--transition);
-      cursor: pointer;
-      border: none;
-      white-space: nowrap;
-    }
-
-    .btn-primary {
-      background: var(--green);
-      color: #050a10;
-    }
-
-    .btn-primary:hover {
-      background: #12ffac;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(10,255,157,0.25);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--green);
-      color: var(--green);
-      transform: translateY(-2px);
-    }
-
-    .hero-scroll {
-      margin-top: 4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      color: var(--muted);
-      font-size: 0.78rem;
-      font-family: var(--mono);
-      letter-spacing: 0.08em;
-    }
-
-    .scroll-line {
-      width: 40px;
-      height: 1px;
-      background: var(--muted);
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
-
-    /* ─── Section common ─────────────────────────────────────── */
-    section {
-      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 8vw, 8rem);
-      position: relative;
-      scroll-margin-top: 84px;
-    }
-
-    section:not(#hero) {
-      isolation: isolate;
-    }
-
-    section:not(#hero) > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    section:not(#hero)::before,
-    section:not(#hero)::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 180px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    section:not(#hero)::before {
-      top: -90px;
-      background:
-        radial-gradient(60% 110% at 18% 50%, var(--smoke-green) 0%, transparent 68%),
-        radial-gradient(55% 120% at 82% 50%, var(--smoke-purple) 0%, transparent 72%),
-        radial-gradient(45% 90% at 50% 50%, var(--smoke-white) 0%, transparent 70%);
-      filter: blur(34px);
-      opacity: 0.95;
-    }
-
-    section:not(#hero)::after {
-      bottom: -90px;
-      background:
-        radial-gradient(50% 100% at 24% 50%, var(--smoke-white) 0%, transparent 72%),
-        radial-gradient(55% 110% at 76% 50%, var(--smoke-green) 0%, transparent 72%),
-        radial-gradient(60% 120% at 50% 50%, var(--smoke-purple) 0%, transparent 78%);
-      filter: blur(42px);
-      opacity: 0.72;
-    }
-
-    .section-label {
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--green);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 700;
-      color: var(--heading);
-      margin-bottom: 0.6rem;
-      letter-spacing: -0.02em;
-    }
-
-    .section-line {
-      width: 48px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--green), var(--purple));
-      border-radius: 2px;
-      margin-bottom: 3rem;
-    }
-
-    /* ─── About ──────────────────────────────────────────────── */
-    #about { background: var(--bg2); }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .about-text p {
-      margin-bottom: 1.2rem;
-      opacity: 0.85;
-      font-size: 1rem;
-    }
-
-    .about-terminal {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      font-family: var(--mono);
-      font-size: 0.82rem;
-    }
-
-    .terminal-bar {
-      background: #1a2335;
-      padding: 0.6rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .dot {
-      width: 11px; height: 11px;
-      border-radius: 50%;
-    }
-    .dot-red    { background: #ff5f56; }
-    .dot-yellow { background: #ffbd2e; }
-    .dot-green  { background: #27c93f; }
-
-    .terminal-body {
-      padding: 1.4rem 1.4rem 1.6rem;
-      line-height: 2;
-    }
-
-    .t-prompt { color: var(--green); }
-    .t-cmd    { color: var(--text); }
-    .t-out    { color: var(--muted); }
-    .t-val    { color: var(--purple); }
-
-    /* ─── Experience ─────────────────────────────────────────── */
-    #experience { background: var(--bg); }
-
-    .timeline {
-      position: relative;
-      padding-left: 2rem;
-    }
-
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom, var(--green) 0%, var(--purple) 60%, transparent 100%);
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: 3rem;
-      padding-left: 2rem;
-    }
-
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -2.4rem;
-      top: 0.45rem;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--green);
-      border: 2px solid var(--bg);
-      box-shadow: 0 0 0 3px var(--green-dim);
-    }
-
-    .timeline-item:nth-child(even)::before {
-      background: var(--purple);
-      box-shadow: 0 0 0 3px var(--purple-dim);
-    }
-
-    .timeline-period {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      margin-bottom: 0.3rem;
-    }
-
-    .timeline-role {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--heading);
-      margin-bottom: 0.1rem;
-    }
-
-    .timeline-company {
-      font-size: 0.88rem;
-      color: var(--green);
-      margin-bottom: 0.8rem;
-      font-weight: 500;
-    }
-
-    .timeline-desc {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.2rem 1.4rem;
-    }
-
-    .timeline-desc li {
-      font-size: 0.9rem;
-      opacity: 0.8;
-      padding-left: 1rem;
-      position: relative;
-      margin-bottom: 0.4rem;
-    }
-
-    .timeline-desc li::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: var(--green);
-      font-size: 0.75rem;
-    }
-
-    /* ─── Skills ─────────────────────────────────────────────── */
-    #skills { background: var(--bg2); }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .skill-card {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.4rem;
-      transition: border-color var(--transition), transform var(--transition);
-    }
-
-    .skill-card:hover {
-      border-color: var(--green);
-      transform: translateY(-3px);
-    }
-
-    .skill-card-title {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      color: var(--green);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    .skill-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tag {
-      padding: 0.3rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      font-weight: 500;
-      font-family: var(--mono);
-      letter-spacing: 0.04em;
-    }
-
-    .tag-green {
-      background: var(--green-dim);
-      color: var(--green);
-      border: 1px solid rgba(10,255,157,0.2);
-    }
-
-    .tag-purple {
-      background: var(--purple-dim);
-      color: var(--purple);
-      border: 1px solid rgba(124,106,247,0.2);
-    }
-
-    .tag-neutral {
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    /* ─── Projects ───────────────────────────────────────────── */
-    #projects { background: var(--bg); }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .project-card {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.8rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      transition: all var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--green), var(--purple));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform var(--transition);
-    }
-
-    .project-card:hover::before { transform: scaleX(1); }
-
-    .project-card:hover {
-      border-color: rgba(10,255,157,0.2);
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
-    }
-
-    .project-icon {
-      font-size: 1.8rem;
-    }
-
-    .project-name {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--heading);
-    }
-
-    .project-desc {
-      font-size: 0.9rem;
-      opacity: 0.75;
-      flex: 1;
-    }
-
-    .project-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .project-link {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      color: var(--green);
-      letter-spacing: 0.06em;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      transition: opacity var(--transition);
-    }
-
-    .project-link:hover { opacity: 0.7; }
-
-    /* ─── Education ──────────────────────────────────────────── */
-    #education { background: var(--bg2); }
-
-    .education-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .edu-card {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.8rem;
-      transition: border-color var(--transition);
-    }
-
-    .edu-card:hover { border-color: var(--purple); }
-
-    .edu-period {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--purple);
-      letter-spacing: 0.08em;
-      margin-bottom: 0.5rem;
-    }
-
-    .edu-degree {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--heading);
-      margin-bottom: 0.3rem;
-      line-height: 1.4;
-    }
-
-    .edu-school {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
-    }
-
-    .edu-level {
-      display: inline-block;
-      padding: 0.25rem 0.7rem;
-      background: var(--purple-dim);
-      color: var(--purple);
-      border: 1px solid rgba(124,106,247,0.25);
-      border-radius: 20px;
-      font-size: 0.72rem;
-      font-family: var(--mono);
-      letter-spacing: 0.06em;
-    }
-
-    /* ─── Contact ────────────────────────────────────────────── */
-    #contact { background: var(--bg); text-align: center; }
-
-    #contact .section-line { margin-left: auto; margin-right: auto; }
-
-    .contact-lead {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 480px;
-      margin: 0 auto 3rem;
-    }
-
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 3.5rem;
-    }
-
-    .contact-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.75rem 1.4rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text);
-      transition: all var(--transition);
-    }
-
-    .contact-link svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-    .contact-link:hover {
-      background: var(--bg3);
-      border-color: var(--green);
-      color: var(--green);
-      transform: translateY(-2px);
-    }
-
-    .contact-email {
-      font-family: var(--mono);
-      font-size: 1.1rem;
-      color: var(--green);
-      letter-spacing: 0.04em;
-      transition: opacity var(--transition);
-    }
-
-    .contact-email:hover { opacity: 0.7; }
-
-    /* ─── Footer ─────────────────────────────────────────────── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem clamp(1.5rem, 8vw, 8rem);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-left {
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .footer-left span { color: var(--green); }
-
-    .footer-right {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    /* ─── Cursor blink ───────────────────────────────────────── */
-    .cursor {
-      display: inline-block;
-      width: 10px; height: 1.1em;
-      background: var(--green);
-      vertical-align: text-bottom;
-      animation: blink 1.1s step-end infinite;
-    }
-
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-    /* ─── Fade-in on scroll ──────────────────────────────────── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ─── Responsive ─────────────────────────────────────────── */
-    @media (max-width: 980px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        position: fixed;
-        top: 60px; left: 0; right: 0;
-        background: rgba(8, 13, 24, 0.97);
-        backdrop-filter: blur(12px);
-        padding: 2rem;
-        border-bottom: 1px solid var(--border);
-        gap: 1.5rem;
-      }
-
-      .nav-links.open { display: flex; }
-
-      .nav-actions {
-        margin-left: auto;
-      }
-
-      .nav-toggle { display: flex; }
-    }
-
-    @media (max-width: 820px) {
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .hero-layout { flex-direction: column-reverse; align-items: flex-start; }
-      .hero-photo-wrap { align-self: center; }
-    }
-
-    @media (max-width: 560px) {
-      .hero-cta { flex-direction: column; }
-      .btn { justify-content: center; }
-      .projects-grid, .education-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bruno Silva · Programador C++ / Qt</title>
+<meta name="description" content="Bruno Silva — programador de software de Vila Verde, Portugal. Aplicações desktop e mobile em C++ e Qt, a família de produtos OnDay e trabalho open source." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Bruno Silva · Programador C++ / Qt" />
+<meta property="og:description" content="Aplicações em C++ e Qt para o chão de fábrica — a família de produtos OnDay e trabalho open source." />
+<meta property="og:url" content="https://bmcsilva.github.io/portfolio/" />
+<meta property="og:image" content="https://bmcsilva.github.io/portfolio/36887106.png" />
+<meta name="twitter:card" content="summary" />
+<meta name="theme-color" content="#070b14" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23070b14'/><text x='16' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%2334e5a6' text-anchor='middle'>b</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#070b14; --surface:#0d1422; --surface-2:#131c2e; --line:#1f2b41;
+  --text:#c9d6e8; --dim:#7488a3; --head:#f2f7ff;
+  --accent:#34e5a6; --accent-soft:#34e5a61f; --violet:#8b7cf8; --violet-soft:#8b7cf81f;
+  --amber:#f5b445; --shadow:0 18px 50px -25px rgba(0,0,0,.9);
+  --mono:'JetBrains Mono',ui-monospace,monospace; --sans:'Inter',system-ui,sans-serif;
+  --r:14px; --pad:clamp(1.25rem,5vw,5rem); --t:.22s cubic-bezier(.4,0,.2,1);
+}
+:root[data-theme="light"]{
+  --bg:#f6f8fc; --surface:#ffffff; --surface-2:#eef2f9; --line:#dce3ee;
+  --text:#3c4a5e; --dim:#6b7c93; --head:#0c1626;
+  --accent:#0f9d6e; --accent-soft:#0f9d6e1a; --violet:#6248d8; --violet-soft:#6248d81a;
+  --amber:#b5761a; --shadow:0 14px 40px -24px rgba(20,35,60,.35);
+}
+
+html{scroll-behavior:smooth;scroll-padding-top:2rem}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.65;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:5.5rem}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+::selection{background:var(--accent-soft);color:var(--accent)}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:9px;border:3px solid var(--bg)}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* ── floating dock ── */
+.dock{position:fixed;left:50%;bottom:1.15rem;transform:translateX(-50%);z-index:60;
+  display:flex;align-items:center;gap:.15rem;padding:.4rem;border-radius:999px;
+  max-width:calc(100vw - 1.5rem);overflow-x:auto;scrollbar-width:none;
+  background:color-mix(in srgb,var(--surface) 86%,transparent);
+  backdrop-filter:blur(18px) saturate(1.5);border:1px solid var(--line);
+  box-shadow:0 14px 40px -14px rgba(0,0,0,.65),0 0 0 1px color-mix(in srgb,var(--bg) 50%,transparent) inset}
+.dock::-webkit-scrollbar{display:none}
+.dock-home{font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--accent);
+  padding:.42rem .7rem;border-radius:999px;white-space:nowrap}
+.dock-home:hover{background:var(--accent-soft)}
+.dock a.s{font-size:.79rem;font-weight:500;color:var(--dim);padding:.42rem .78rem;
+  border-radius:999px;white-space:nowrap;transition:color var(--t),background var(--t)}
+.dock a.s:hover{color:var(--head);background:var(--surface-2)}
+.dock a.s.on{color:var(--accent);background:var(--accent-soft)}
+.sep{width:1px;height:18px;background:var(--line);margin:0 .35rem;flex:none}
+.pill{display:flex;gap:2px;flex:none}
+.pill button{border:0;background:none;cursor:pointer;font-family:var(--mono);font-size:.68rem;
+  font-weight:500;color:var(--dim);padding:.3rem .5rem;border-radius:999px;transition:all var(--t)}
+.pill button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.icon-btn{width:31px;height:31px;flex:none;display:grid;place-items:center;border:0;border-radius:999px;
+  background:none;color:var(--dim);cursor:pointer;transition:all var(--t)}
+.icon-btn:hover{color:var(--accent);background:var(--surface-2)}
+.icon-btn svg{width:15px;height:15px}
+:root[data-theme="light"] .moon{display:none}
+:root:not([data-theme="light"]) .sun{display:none}
+
+/* ── back to top ── */
+.totop{position:fixed;right:1.15rem;bottom:1.15rem;z-index:59;width:42px;height:42px;
+  display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;
+  background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(14px);
+  color:var(--dim);cursor:pointer;opacity:0;pointer-events:none;transform:translateY(10px);
+  transition:opacity var(--t),transform var(--t),color var(--t),border-color var(--t)}
+.totop.show{opacity:1;pointer-events:auto;transform:none}
+.totop:hover{color:var(--accent);border-color:var(--accent)}
+.totop svg{width:17px;height:17px}
+
+/* ── layout ── */
+section{padding:clamp(4.5rem,9vw,7.5rem) var(--pad);max-width:1180px;margin-inline:auto}
+.eyebrow{font-family:var(--mono);font-size:.76rem;color:var(--accent);margin-bottom:.6rem}
+h2{font-size:clamp(1.7rem,3.6vw,2.5rem);color:var(--head);font-weight:800;letter-spacing:-.025em;line-height:1.15}
+.sub{color:var(--dim);font-size:.96rem;max-width:78ch;margin:0 0 2rem}
+.rule{height:1px;background:linear-gradient(90deg,var(--line),transparent);margin:1.8rem 0 2.6rem}
+
+/* ── hero ── */
+#hero{min-height:100svh;display:grid;align-content:center;padding-top:4rem;position:relative}
+#hero::before{content:"";position:absolute;top:-10%;right:-5%;width:52vw;height:52vw;max-width:620px;
+  max-height:620px;background:radial-gradient(circle,var(--accent-soft),transparent 66%);
+  filter:blur(30px);pointer-events:none;z-index:-1}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);
+  gap:clamp(2rem,5vw,4.5rem);align-items:center}
+.status{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.74rem;
+  color:var(--dim);border:1px solid var(--line);background:var(--surface);border-radius:999px;
+  padding:.3rem .8rem;margin-bottom:1.4rem}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 0 var(--accent);animation:ping 2.4s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+h1{font-size:clamp(2.7rem,7.5vw,4.7rem);line-height:1.02;font-weight:800;letter-spacing:-.04em;color:var(--head)}
+h1 em{font-style:normal;background:linear-gradient(120deg,var(--accent),var(--violet));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.role{font-family:var(--mono);font-size:clamp(.86rem,1.9vw,1.02rem);color:var(--accent);margin:.9rem 0 1.1rem}
+.hero-desc{max-width:56ch;font-size:1.02rem}
+.cta{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2rem}
+.btn{display:inline-flex;align-items:center;gap:.45rem;font-size:.86rem;font-weight:600;
+  padding:.72rem 1.25rem;border-radius:10px;border:1px solid var(--line);transition:all var(--t)}
+.btn:hover{transform:translateY(-2px)}
+.btn-1{background:var(--accent);color:#04120d;border-color:var(--accent);box-shadow:0 10px 26px -12px var(--accent)}
+.btn-2{background:var(--surface);color:var(--head)}
+.btn-2:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost{background:none;color:var(--dim);border-color:transparent;font-family:var(--mono);
+  font-size:.78rem;padding:.72rem .6rem}
+.btn-ghost:hover{color:var(--accent)}
+.portrait{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
+.portrait img{width:100%;aspect-ratio:1/1.08;object-fit:cover;object-position:center top;filter:grayscale(.25)}
+.portrait::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 55%,color-mix(in srgb,var(--bg) 85%,transparent))}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:3.2rem}
+.fact{background:var(--bg);padding:1.05rem 1.15rem}
+.fact b{display:block;font-family:var(--mono);font-size:1.45rem;color:var(--head);font-weight:700;letter-spacing:-.02em}
+.fact span{font-size:.76rem;color:var(--dim)}
+
+/* ── about ── */
+.about{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(1.6rem,4vw,3.2rem);align-items:start}
+.about p+p{margin-top:1rem}
+.about strong{color:var(--head);font-weight:600}
+.term{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden;box-shadow:var(--shadow)}
+.term-bar{display:flex;align-items:center;gap:.4rem;padding:.65rem .9rem;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.term-bar i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.term-bar i:first-child{background:#ff5f57}.term-bar i:nth-child(2){background:#febc2e}.term-bar i:nth-child(3){background:#28c840}
+.term-bar small{font-family:var(--mono);font-size:.7rem;color:var(--dim);margin-left:.5rem}
+.term-body{padding:1.15rem;font-family:var(--mono);font-size:.79rem;line-height:1.95}
+.term-body .p{color:var(--accent)}.term-body .c{color:var(--head)}
+.term-body .v{color:var(--text)}.term-body .m{color:var(--dim)}
+.term-body a{color:var(--accent);border-bottom:1px dashed color-mix(in srgb,var(--accent) 45%,transparent)}
+.caret{display:inline-block;width:7px;height:14px;background:var(--accent);vertical-align:-2px;animation:blink 1.1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ── cards ── */
+.grid{display:grid;gap:1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.5rem;
+  display:flex;flex-direction:column;gap:.75rem;transition:border-color var(--t),transform var(--t)}
+.card:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));transform:translateY(-3px)}
+.card h3{font-size:1.06rem;color:var(--head);font-weight:700;letter-spacing:-.015em;
+  display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.card p{font-size:.88rem;color:var(--text)}
+.card-body{font-size:.88rem;color:var(--text);flex:1;display:flex;flex-direction:column;gap:.7rem}
+.card-body ul{display:flex;flex-direction:column;gap:.35rem}
+.card-body li{position:relative;padding-left:1rem}
+.card-body li::before{content:"–";position:absolute;left:0;color:var(--accent)}
+.badge{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.08em;
+  padding:.2rem .5rem;border-radius:5px;background:var(--violet-soft);color:var(--violet);font-weight:500}
+.badge.live{background:var(--accent-soft);color:var(--accent)}
+.tags{display:flex;flex-wrap:wrap;gap:.35rem}
+.plats{display:flex;align-items:center;gap:.3rem;flex-wrap:wrap}
+.plat{font-size:.7rem;font-weight:500;padding:.2rem .55rem;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text)}
+.tag{font-family:var(--mono);font-size:.7rem;padding:.22rem .55rem;border-radius:6px;
+  background:var(--surface-2);color:var(--dim);border:1px solid var(--line)}
+.tag.hi{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);background:var(--accent-soft)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding-top:.85rem;
+  border-top:1px solid var(--line);font-family:var(--mono);font-size:.75rem;color:var(--dim)}
+.card-foot a{color:var(--accent)}
+.card-foot a:hover{text-decoration:underline}
+.meta{display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;color:var(--dim)}
+.meta span{display:inline-flex;align-items:center;gap:.3rem}
+.lang-dot{width:8px;height:8px;border-radius:50%;background:var(--violet)}
+
+/* ── app mockups ── */
+.shot{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  background:var(--surface-2);cursor:zoom-in;transition:border-color var(--t)}
+.shot:hover{border-color:color-mix(in srgb,var(--accent) 55%,var(--line))}
+.shot.has-img{cursor:zoom-in}
+.shot-chrome{display:flex;align-items:center;gap:.3rem;padding:.4rem .6rem;
+  background:color-mix(in srgb,var(--bg) 55%,var(--surface-2));border-bottom:1px solid var(--line)}
+.shot-chrome i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.shot-chrome small{font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-left:.35rem}
+.shot-body{padding:.7rem;display:grid;gap:.5rem;background:var(--bg);font-size:.66rem;min-height:150px;align-content:start}
+.shot-note{font-family:var(--mono);font-size:.6rem;color:var(--dim);padding:.3rem .6rem;
+  border-top:1px solid var(--line);background:var(--surface-2)}
+
+/* kiosk (OnDay terminal) */
+.k-top{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.k-who{display:flex;align-items:center;gap:.5rem}
+.k-fp{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:.9rem;
+  background:var(--accent-soft);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}
+.k-who b{display:block;color:var(--head);font-size:.72rem;font-weight:600}
+.k-who small{color:var(--dim);font-family:var(--mono);font-size:.58rem}
+.k-clock{font-family:var(--mono);font-size:1.15rem;font-weight:700;color:var(--head);line-height:1;text-align:right}
+.k-clock small{display:block;font-size:.55rem;color:var(--dim);font-weight:400;margin-top:.15rem}
+.k-job{display:flex;align-items:center;gap:.4rem;padding:.4rem .55rem;border-radius:7px;
+  background:var(--surface);border:1px solid var(--line);color:var(--text);font-size:.63rem}
+.k-job b{color:var(--accent);font-family:var(--mono)}
+.k-live{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:ping 2.4s infinite}
+.k-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:.3rem}
+.k-btns b{font-family:var(--mono);font-size:.56rem;text-align:center;padding:.4rem .2rem;border-radius:6px;
+  background:var(--surface);border:1px solid var(--line);color:var(--dim);font-weight:500}
+.k-btns b.go{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 40%,transparent);color:var(--accent)}
+
+/* planner board */
+.pl-bar{display:flex;gap:.25rem;flex-wrap:wrap}
+.pl-bar span{font-family:var(--mono);font-size:.55rem;padding:.15rem .4rem;border-radius:4px;
+  background:var(--surface);border:1px solid var(--line);color:var(--dim)}
+.pl-bar span.f{background:var(--violet-soft);border-color:color-mix(in srgb,var(--violet) 35%,transparent);color:var(--violet)}
+.pl-grid{display:grid;grid-template-columns:64px repeat(5,1fr);gap:2px;font-size:.55rem}
+.pl-grid .h{font-family:var(--mono);font-size:.52rem;color:var(--dim);text-align:center;padding:.15rem 0}
+.pl-grid .w{font-family:var(--mono);font-size:.52rem;color:var(--text);display:flex;align-items:center;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-right:.3rem}
+.pl-grid .c{height:15px;border-radius:3px;background:var(--surface)}
+.pl-grid .c.a{background:color-mix(in srgb,var(--accent) 42%,var(--surface))}
+.pl-grid .c.v{background:color-mix(in srgb,var(--violet) 45%,var(--surface))}
+.pl-grid .c.m{background:color-mix(in srgb,var(--amber) 42%,var(--surface))}
+.pl-grid .c.done{background:color-mix(in srgb,#3b82f6 45%,var(--surface))}
+
+/* tintas formula */
+.tt-top{display:flex;align-items:center;gap:.55rem}
+.tt-chip{width:38px;height:38px;border-radius:8px;background:#7a4f2e;border:1px solid var(--line);flex:none}
+.tt-top b{display:block;color:var(--head);font-size:.72rem}
+.tt-de{font-family:var(--mono);font-size:.58rem;color:var(--accent)}
+.tt-rows{display:grid;gap:.18rem}
+.tt-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.57rem;
+  color:var(--text);padding:.22rem .45rem;border-radius:5px;background:var(--surface)}
+.tt-row i{width:7px;height:7px;border-radius:2px;display:inline-block;margin-right:.35rem;vertical-align:-1px}
+.tt-flow{display:flex;align-items:center;gap:.2rem;font-family:var(--mono);font-size:.52rem;color:var(--dim)}
+.tt-flow u{text-decoration:none;padding:.15rem .35rem;border-radius:4px;background:var(--surface);border:1px solid var(--line)}
+.tt-flow u.on{background:var(--accent-soft);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+
+/* stock table */
+.tb{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.55rem}
+.tb th{text-align:left;color:var(--dim);font-weight:500;padding:.22rem .3rem;border-bottom:1px solid var(--line)}
+.tb td{padding:.24rem .3rem;color:var(--text);border-bottom:1px solid color-mix(in srgb,var(--line) 50%,transparent)}
+.tb td.n{text-align:right}
+.tb .low{color:var(--amber)}
+.sync{display:flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.55rem;color:var(--amber)}
+.sync i{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+
+/* lightbox */
+dialog{border:0;padding:0;background:transparent;max-width:min(980px,94vw);width:100%;
+  height:fit-content;margin:auto;inset:0}
+dialog::backdrop{background:rgba(3,7,14,.82);backdrop-filter:blur(6px)}
+.lb{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.lb .shot{border:0;border-radius:0;cursor:default}
+.lb .shot-body{font-size:1rem;padding:1.6rem;gap:1.1rem;min-height:0}
+.lb .k-fp{width:64px;height:64px;font-size:1.9rem;border-radius:14px}
+.lb .k-who b{font-size:1.15rem}.lb .k-who small{font-size:.8rem}
+.lb .k-clock{font-size:2.6rem}.lb .k-clock small{font-size:.8rem}
+.lb .k-job{font-size:.95rem;padding:.8rem 1rem}
+.lb .k-btns b{font-size:.82rem;padding:.9rem .3rem}
+.lb .pl-grid{font-size:.8rem;gap:4px;grid-template-columns:110px repeat(5,1fr)}
+.lb .pl-grid .h,.lb .pl-grid .w{font-size:.78rem}
+.lb .pl-grid .c{height:32px;border-radius:5px}
+.lb .pl-bar span{font-size:.78rem;padding:.3rem .6rem}
+.lb .tt-chip{width:76px;height:76px;border-radius:14px}
+.lb .tt-top b{font-size:1.15rem}.lb .tt-de{font-size:.85rem}
+.lb .tt-row{font-size:.85rem;padding:.5rem .8rem}
+.lb .tt-flow{font-size:.78rem}.lb .tt-flow u{padding:.3rem .6rem}
+.lb .tb{font-size:.82rem}.lb .tb th,.lb .tb td{padding:.5rem .6rem}
+.lb .sync{font-size:.8rem}
+.lb .shot-note{font-size:.78rem;padding:.7rem 1.2rem}
+.lb-close{position:absolute;top:.6rem;right:.6rem;width:32px;height:32px;border-radius:50%;
+  border:1px solid var(--line);background:var(--surface);color:var(--dim);cursor:pointer;
+  display:grid;place-items:center;font-size:1rem;line-height:1}
+.lb-close:hover{color:var(--accent);border-color:var(--accent)}
+.lb-wrap{position:relative}
+.lb img{width:100%;height:auto;display:block}
+.shot.has-img img{width:100%;height:auto;display:block}
+.lb-bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:.7rem;
+  font-family:var(--mono);font-size:.78rem;color:var(--dim)}
+.lb-bar button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+  background:var(--surface);color:var(--text);cursor:pointer;font-size:1.1rem;line-height:1;
+  margin-left:.4rem;transition:all var(--t)}
+.lb-bar button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── timeline ── */
+.tl{position:relative;padding-left:1.9rem}
+.tl::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;
+  background:linear-gradient(var(--accent),var(--line) 30%,var(--line))}
+.job{position:relative;padding-bottom:2.4rem}
+.job:last-child{padding-bottom:0}
+.job::before{content:"";position:absolute;left:-1.9rem;top:6px;width:11px;height:11px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--line)}
+.job.now::before{border-color:var(--accent);background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.when{font-family:var(--mono);font-size:.74rem;color:var(--dim)}
+.edu-at{color:var(--dim);font-size:.84rem;flex:none!important}
+.job h3{font-size:1.05rem;color:var(--head);font-weight:700;margin:.2rem 0 .1rem}
+.at{font-size:.85rem;color:var(--accent);font-weight:500;margin-bottom:.7rem}
+.job li{position:relative;padding-left:1.05rem;font-size:.87rem;margin-bottom:.35rem}
+.job li::before{content:"▸";position:absolute;left:0;color:var(--dim);font-size:.75rem}
+
+/* ── contact ── */
+#contact{text-align:center;max-width:820px}
+#contact .rule{margin-inline:auto;width:60px;background:var(--accent)}
+.channels{display:flex;flex-wrap:wrap;justify-content:center;gap:.65rem;margin:2rem 0}
+.ch{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.1rem;border:1px solid var(--line);
+  border-radius:10px;background:var(--surface);font-size:.86rem;font-weight:500;transition:all var(--t)}
+.ch:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.ch svg{width:17px;height:17px}
+.mail{display:inline-block;font-family:var(--mono);font-size:clamp(.85rem,2.4vw,1.15rem);color:var(--head);
+  border-bottom:1px solid var(--accent);padding-bottom:.2rem}
+.mail:hover{color:var(--accent)}
+footer{border-top:1px solid var(--line);padding:1.8rem var(--pad) 2.4rem;display:flex;flex-wrap:wrap;
+  gap:.6rem;justify-content:space-between;font-family:var(--mono);font-size:.73rem;color:var(--dim)}
+footer b{color:var(--text);font-weight:500}
+
+/* ── reveal ── */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}}
+
+/* ── responsive ── */
+@media (max-width:860px){
+  .hero-grid,.about{grid-template-columns:1fr}
+  .portrait{max-width:250px;order:-1}
+  .dock a.s{font-size:.75rem;padding:.4rem .6rem}
+  .totop{bottom:4.6rem}
+}
+</style>
 </head>
+
 <body>
 
-  <!-- ─── Nav ─────────────────────────────────────── -->
-  <nav>
-    <div class="nav-logo">~/ bmcsilva</div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <div class="nav-actions">
-      <div class="lang-switch" role="group" aria-label="Language selector">
-        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
-        <button type="button" class="lang-btn" data-lang="pt" aria-pressed="false">PT</button>
-      </div>
-      <div class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
+<!-- ── hero ── -->
+<section id="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="status"><i class="dot"></i><span data-i18n="hero.status">Available for freelance &amp; full-time</span></span>
+      <h1>Bruno <em>Silva</em></h1>
+      <p class="role" data-i18n="hero.role">Software Developer // C++ &amp; Qt</p>
+      <p class="hero-desc" data-i18n="hero.desc">Self-taught software developer focused on building robust desktop applications with C++ and Qt. Used to working with clean architecture, MVC, MVVM, quality assurance, and open-source projects aimed at real problems.</p>
+      <div class="cta">
+        <a class="btn btn-1" href="#onday" data-i18n="hero.cta1">My projects</a>
+        <a class="btn btn-2" href="#contact" data-i18n="hero.cta2">Get in touch</a>
+        <a class="btn btn-ghost" href="CV_EN.pdf" download>↓ CV (EN)</a>
+        <a class="btn btn-ghost" href="CV_PT.pdf" download>↓ CV (PT)</a>
       </div>
     </div>
-  </nav>
+    <div class="portrait"><img src="36887106.png" alt="Bruno Silva" loading="eager" /></div>
+  </div>
+  <div class="facts">
+    <div class="fact"><b id="f-years">—</b><span data-i18n="fact.years">years in software</span></div>
+    <div class="fact"><b>4</b><span data-i18n="fact.products">OnDay products shipped</span></div>
+    <div class="fact"><b id="f-repos">—</b><span data-i18n="fact.repos">public repositories</span></div>
+    <div class="fact"><b>C++ / Qt</b><span data-i18n="fact.stack">daily stack</span></div>
+  </div>
+</section>
 
-  <!-- ─── Hero ─────────────────────────────────────── -->
-  <section id="hero">
-    <div class="hero-layout">
-      <div class="hero-inner">
-        <p class="hero-label">Hello, world. I'm</p>
-        <h1 class="hero-name">Bruno<br/><span>Silva</span></h1>
-        <p class="hero-title">Software Developer // C++ &amp; Qt</p>
-        <p class="hero-desc">
-          Self-taught software developer focused on building robust desktop applications with C++ and Qt.
-          Practical, persistent, and comfortable working with clean architecture, MVC, MVVM, software quality,
-          and open-source projects.
-        </p>
-        <div class="hero-cta">
-          <a href="#experience" class="btn btn-primary">View my journey</a>
-          <a href="#contact" class="btn btn-outline">Get in touch</a>
-          <a href="CV_EN.pdf" download class="btn btn-outline">↓ CV (EN)</a>
-          <a href="CV_PT.pdf" download class="btn btn-outline">↓ CV (PT)</a>
-        </div>
-        <div class="hero-scroll">
-          <span class="scroll-line"></span>
-          <span class="hero-scroll-text">scroll to explore</span>
-        </div>
-      </div>
-      <div class="hero-photo-wrap">
-        <img src="36887106.png" alt="Bruno Silva" class="hero-photo" />
+<!-- ── about ── -->
+<section id="about">
+  <p class="eyebrow rv">$ whoami</p>
+  <h2 class="rv" data-i18n="about.title">From the production line to the codebase</h2>
+  <div class="rule rv"></div>
+  <div class="about">
+    <div class="rv">
+      <p data-i18n="about.p1">I began my professional journey in 2016, working in production and technical support roles. Over time, I built a strong foundation in hardware, support, and manual testing.</p>
+      <p data-i18n="about.p2">In 2018, I took on the role of Manual Software Tester, where I developed key skills in functional validation, test plan creation, and communication with development teams. In 2023, I embraced the challenge of transitioning into software development — first as a trainee, and now as a Software Developer focusing on C++ and Qt.</p>
+      <p data-i18n-html="about.p3">In my free time, I dedicate myself to personal projects in C, working with Arduino, Raspberry Pi, and GTK+ — including <strong>OnDay</strong>, an independent project offering cross-platform desktop solutions for Windows and Ubuntu. I am a self-taught, practical, and persistent professional, always looking for new challenges that allow me to grow in both software development and software quality.</p>
+    </div>
+    <div class="term rv">
+      <div class="term-bar"><i></i><i></i><i></i><small>bruno@portfolio ~ $</small></div>
+      <div class="term-body">
+        <div><span class="p">$ </span><span class="c">cat stack.txt</span></div>
+        <div class="v">C · C++20 · Qt6 / QML · GTK3 · SQLite · Python</div>
+        <br/>
+        <div><span class="p">$ </span><span class="c">cat hardware.txt</span></div>
+        <div class="v">Raspberry Pi · <span class="m">touch</span> · <span class="m">fingerprint</span> · <span class="m">RFID</span> · <span class="m">thermal printers</span></div>
+        <br/>
+        <div><span class="p">$ </span><span class="c">echo $FOCUS</span></div>
+        <div class="v" data-i18n="term.focus">Backend first — but the UI will behave</div>
+        <br/>
+        <div><span class="p">$ </span><span class="c">git config user.location</span></div>
+        <div class="v">Vila Verde, Portugal · <span class="m">remote friendly</span></div>
+        <br/>
+        <div><span class="p">$ </span><span class="c">ls links/</span></div>
+        <div class="m">onday      → <a href="https://onday.pt" target="_blank" rel="noopener">onday.pt</a></div>
+        <div class="m">github     → <a href="https://github.com/bmcsilva" target="_blank" rel="noopener">github.com/bmcsilva</a></div>
+        <br/>
+        <div><span class="p">$ </span><span class="caret"></span></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ─── About ─────────────────────────────────────── -->
-  <section id="about">
-    <p class="section-label reveal">$ whoami</p>
-    <h2 class="section-title reveal">About me</h2>
-    <div class="section-line reveal"></div>
+<!-- ── onday ── -->
+<section id="onday">
+  <p class="eyebrow rv">$ ls onday/</p>
+  <h2 class="rv" data-i18n="onday.title">The OnDay family</h2>
+  <div class="rule rv"></div>
+  <p class="sub rv" data-i18n="onday.sub">A product line built for real businesses — each one began with a client who was still doing the job on paper.</p>
+  <div class="grid g2">
 
-    <div class="about-grid">
-      <div class="about-text reveal">
-        <p>
-          I began my professional journey in 2016, working in production and technical support roles.
-          Over time, I built a strong foundation in hardware, support, and manual testing.
-        </p>
-        <p>
-          In 2018, I took on the role of Manual Software Tester, where I developed key skills in
-          functional validation, test plan creation, and communication with development teams. In 2023,
-          I embraced the challenge of transitioning into software development — first as a trainee,
-          and now as a Software Developer focusing on C++ and Qt.
-        </p>
-        <p>
-          In my free time, I dedicate myself to personal projects in C, working with Arduino,
-          Raspberry Pi, and GTK+ — including <strong style="color: var(--heading);">OnDay</strong>, an independent
-          project offering cross-platform desktop solutions for Windows and Ubuntu. I am a self-taught,
-          practical, and persistent professional, always looking for new challenges that allow me to
-          grow in both software development and software quality.
-        </p>
-      </div>
-
-      <div class="about-terminal reveal">
-        <div class="terminal-bar">
-          <span class="dot dot-red"></span>
-          <span class="dot dot-yellow"></span>
-          <span class="dot dot-green"></span>
-          <span style="font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-left: 0.5rem;">bruno@portfolio ~ $</span>
+    <article class="card rv">
+      <h3>🕐 OnDay <span class="badge live" data-i18n="badge.product">product</span></h3>
+      <div class="shot" data-shot="onday" role="button" tabindex="0" aria-label="OnDay terminal preview">
+        <div class="shot-chrome"><i></i><i></i><i></i><small>OnDay · Raspberry Pi · 7" touch</small></div>
+        <div class="shot-body">
+          <div class="k-top">
+            <div class="k-who">
+              <div class="k-fp">☝</div>
+              <div><b>Joana Marques</b><small>#0142 · Serralharia</small></div>
+            </div>
+            <div class="k-clock">08:02<small>seg · 21 set</small></div>
+          </div>
+          <div class="k-job"><i class="k-live"></i>Obra <b>#1042</b> — Portão corrediço · 1h12</div>
+          <div class="k-btns"><b class="go">ENTRADA</b><b>SAÍDA</b><b>OBRA</b><b>PAUSA</b></div>
         </div>
-        <div class="terminal-body">
-          <div><span class="t-prompt">$ </span><span class="t-cmd">cat stack.txt</span></div>
-          <div class="t-val">C / C++ · Qt / QML · GTK3 · SQLite</div>
-          <br/>
-          <div><span class="t-prompt">$ </span><span class="t-cmd">echo $PREFERENCE</span></div>
-          <div class="t-val terminal-preference">Backend &gt; Frontend (but I'll make the UI behave)</div>
-          <br/>
-          <div><span class="t-prompt">$ </span><span class="t-cmd">echo $TARGET</span></div>
-          <div class="t-val terminal-target">Desktop first → same app, mobile next (Qt/QML)</div>
-          <br/>
-          <div><span class="t-prompt">$ </span><span class="t-cmd">ls -la featured/</span></div>
-          <div class="t-out">drwxr-xr-x  OnDay              → <a href="https://onday.pt" target="_blank" rel="noopener" style="color: var(--green);">onday.pt</a></div>
-          <div class="t-out">drwxr-xr-x  ZeroPad-Customizer → <a href="https://github.com/bmcsilva/zeropad-customizer-app" target="_blank" rel="noopener" style="color: var(--green);">github</a></div>
-          <br/>
-          <div><span class="t-prompt">$ </span><span class="cursor"></span></div>
+        <div class="shot-note" data-i18n="shot.note">Interface mockup · fictional data</div>
+      </div>
+      <div class="card-body" data-i18n-html="onday.core">
+        <p>The terminal sits in the production area. Workers identify themselves with a fingerprint, an RFID card or their own credentials, and use it to:</p>
+        <ul><li>Clock in and out.</li>
+        <li>Open and close the jobs they are working on, so the time spent lands against the right job and the right task.</li></ul>
+        <p>At the end of the day the system produces printed reports and job sheets. On the administration side it manages workers, clients, jobs, tasks and schedules, and corrects clock records when someone forgets to clock in.</p>
+      </div>
+      <div class="plats"><span class="plat">Windows</span><span class="plat">Linux</span><span class="plat">Raspberry Pi</span></div>
+      
+      <div class="card-foot"><span data-i18n="onday.since">since 2021</span><a href="https://onday.pt" target="_blank" rel="noopener">↗ onday.pt</a></div>
+    </article>
+
+    <article class="card rv">
+      <h3>📋 OnDay Pro Planner <span class="badge" data-i18n="badge.client">client</span></h3>
+      <div class="shot" data-shot="planner" role="button" tabindex="0" aria-label="Pro Planner preview">
+        <div class="shot-chrome"><i></i><i></i><i></i><small>OnDay Pro Planner · Qt/QML</small></div>
+        <div class="shot-body">
+          <div class="pl-bar"><span class="f">#Serralharia</span><span class="f">Semana 39</span><span>+ filtro</span><span>Grupos ▾</span></div>
+          <div class="pl-grid">
+            <div class="h"></div><div class="h">SEG</div><div class="h">TER</div><div class="h">QUA</div><div class="h">QUI</div><div class="h">SEX</div>
+            <div class="w">J. Marques</div><div class="c a"></div><div class="c a"></div><div class="c done"></div><div class="c"></div><div class="c v"></div>
+            <div class="w">P. Costa</div><div class="c v"></div><div class="c v"></div><div class="c v"></div><div class="c m"></div><div class="c"></div>
+            <div class="w">A. Ferreira</div><div class="c done"></div><div class="c"></div><div class="c a"></div><div class="c a"></div><div class="c a"></div>
+            <div class="w">R. Lopes</div><div class="c m"></div><div class="c m"></div><div class="c"></div><div class="c done"></div><div class="c done"></div>
+          </div>
         </div>
+        <div class="shot-note" data-i18n="shot.note">Interface mockup · fictional data</div>
       </div>
-    </div>
-  </section>
-
-  <!-- ─── Experience ────────────────────────────────── -->
-  <section id="experience">
-    <p class="section-label reveal">$ git log --oneline</p>
-    <h2 class="section-title reveal">Work Experience</h2>
-    <div class="section-line reveal"></div>
-
-    <div class="timeline">
-
-      <div class="timeline-item reveal">
-        <div class="timeline-period">01 / 2024 — Present</div>
-        <div class="timeline-role">Software Developer</div>
-        <div class="timeline-company">SDILAB · Braga, Portugal</div>
-        <ul class="timeline-desc">
-          <li>Developed software solutions using the C++ programming language.</li>
-          <li>Leveraged the Qt framework to build graphical interfaces and cross-platform applications.</li>
-          <li>Conducted technical research and gathered requirements from stakeholders to support the implementation of new features.</li>
-          <li>Ensured the implementation of tests at the unit, module, process, and system levels.</li>
-          <li>Led the Quality Assurance process, fostering a testing culture throughout all stages of development.</li>
-          <li>Coordinated initiatives to improve delivery quality, ensuring solution robustness and collaborating with the Customer Support team for alignment and final validation.</li>
-        </ul>
+      <div class="card-body" data-i18n-html="onday.planner">
+        <p>Plans a team's work. Each activity (job) has its own board with a fixed position for every worker, and tasks are managed so they can be reused, so repeated work is never written twice.</p>
+        <ul><li>Workers are grouped.</li>
+        <li>Service orders are assembled from those recurring tasks.</li>
+        <li>The summary shows how much is pending, running and finished.</li>
+        <li>A job closed at the terminal shows up as finished here.</li>
+        <li>A task can also be closed from this side.</li></ul>
       </div>
+      <div class="plats"><span class="plat">Windows</span><span class="plat">Linux</span><span class="plat">Android</span></div>
+      
+      <div class="card-foot"><span data-i18n="foot.private">Private client project</span></div>
+    </article>
 
-      <div class="timeline-item reveal">
-        <div class="timeline-period">06 / 2023 — 12 / 2023</div>
-        <div class="timeline-role">Software Developer · Trainee</div>
-        <div class="timeline-company">SDILAB · Braga, Portugal</div>
-        <ul class="timeline-desc">
-          <li>Developed automated scripts to create operating system images for ARM-based platforms.</li>
-          <li>Supported C, C++, and Python development tasks, including implementing procedures and tools for injecting images into devices.</li>
-          <li>Played a key role in software validation, focusing on the migration and compatibility of applications converted to Qt6 from various market products.</li>
-        </ul>
-      </div>
-
-      <div class="timeline-item reveal">
-        <div class="timeline-period">01 / 2021 — Present</div>
-        <div class="timeline-role">Software Developer · Freelancer</div>
-        <div class="timeline-company">Independent · Remote</div>
-        <ul class="timeline-desc">
-          <li>Full-cycle software development, from concept to implementation.</li>
-          <li>Requirements analysis and definition in collaboration with the client.</li>
-          <li>Project management, ensuring deadlines, quality, and alignment with objectives.</li>
-          <li>Provided technical support and post-delivery follow-up.</li>
-          <li>Produced functional and technical documentation, as well as data analysis to support decision-making.</li>
-          <li>Developed the product website and related web presence as an additional deliverable.</li>
-        </ul>
-      </div>
-
-      <div class="timeline-item reveal">
-        <div class="timeline-period">11 / 2018 — 12 / 2023</div>
-        <div class="timeline-role">Manual Software Tester</div>
-        <div class="timeline-company">SDILAB · Braga, Portugal</div>
-        <ul class="timeline-desc">
-          <li>Prepared and documented test plans for specific features.</li>
-          <li>Executed defined tests and validated the results.</li>
-          <li>Communicated test outcomes to the development team, contributing to software refinement and ongoing improvement.</li>
-        </ul>
-      </div>
-
-      <div class="timeline-item reveal">
-        <div class="timeline-period">11 / 2017 — 11 / 2018</div>
-        <div class="timeline-role">Customer Support</div>
-        <div class="timeline-company">Balanças Marques · Braga, Portugal</div>
-        <ul class="timeline-desc">
-          <li>Delivered technical support to clients both on-site and remotely, ensuring timely and effective problem resolution.</li>
-          <li>Conducted manual testing of equipment and software, accurately identifying and diagnosing functional issues.</li>
-          <li>Carried out repairs and maintenance on electronic equipment, ensuring full operational functionality and compliance with technical standards.</li>
-        </ul>
-      </div>
-
-      <div class="timeline-item reveal">
-        <div class="timeline-period">09 / 2016 — 11 / 2017</div>
-        <div class="timeline-role">Production Operator · Commercial Scales</div>
-        <div class="timeline-company">Balanças Marques · Braga, Portugal</div>
-        <ul class="timeline-desc">
-          <li>Gathered and prepared materials for assembling scales used in grocery stores, fish markets, butcher shops, and other retail businesses.</li>
-          <li>Supported various stages of production and carried out the technical assembly of equipment.</li>
-          <li>Packaged and secured finished products, maintaining quality standards and ensuring safe transport.</li>
-        </ul>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ─── Skills ─────────────────────────────────────── -->
-  <section id="skills">
-    <p class="section-label reveal">$ cat skills.json</p>
-    <h2 class="section-title reveal">Skills</h2>
-    <div class="section-line reveal"></div>
-
-    <div class="skills-grid">
-      <div class="skill-card reveal">
-        <div class="skill-card-title">// Languages</div>
-        <div class="skill-tags">
-          <span class="tag tag-green">C</span>
-          <span class="tag tag-green">C++</span>
-          <span class="tag tag-neutral">Python</span>
-          <span class="tag tag-neutral">Bash / Shell</span>
+    <article class="card rv">
+      <h3>🎨 OnDay Tintas <span class="badge" data-i18n="badge.client">client</span></h3>
+      <div class="shot" data-shot="tintas" role="button" tabindex="0" aria-label="OnDay Tintas preview">
+        <div class="shot-chrome"><i></i><i></i><i></i><small>OnDay Tintas · Produção</small></div>
+        <div class="shot-body">
+          <div class="tt-top">
+            <div class="tt-chip"></div>
+            <div><b>Castanho Nogueira</b><span class="tt-de">ΔE 0.42 · dentro da tolerância</span></div>
+          </div>
+          <div class="tt-rows">
+            <div class="tt-row"><span><i style="background:#c9a227"></i>Base amarelo óxido</span><span>412,0 g</span></div>
+            <div class="tt-row"><span><i style="background:#8b3a2f"></i>Pigmento vermelho</span><span>128,5 g</span></div>
+            <div class="tt-row"><span><i style="background:#2b2b2b"></i>Preto carbono</span><span>36,2 g</span></div>
+          </div>
+          <div class="tt-flow"><u class="on">Pedido</u>→<u class="on">Fórmula</u>→<u class="on">Produção</u>→<u>Entregue</u></div>
         </div>
+        <div class="shot-note" data-i18n="shot.note">Interface mockup · fictional data</div>
       </div>
-
-      <div class="skill-card reveal">
-        <div class="skill-card-title">// Frameworks &amp; Libraries</div>
-        <div class="skill-tags">
-          <span class="tag tag-green">Qt / QML</span>
-          <span class="tag tag-green">GTK3 / GTK+</span>
-          <span class="tag tag-neutral">Qt Quick Controls</span>
-          <span class="tag tag-neutral">Qt Network</span>
-          <span class="tag tag-neutral">Qt SQL</span>
-        </div>
+      <div class="card-body" data-i18n-html="onday.tintas">
+        <p>Built for a paint shop. It keeps each client's colour formulas and measures how close a mix is to the colour that was asked for, so a recipe can be reused whenever the same colour comes back instead of being matched from scratch.</p>
+        <ul><li>Each order moves through its stages, from the request at the counter to production and delivery.</li>
+        <li>It manages the stock, warning when an item drops below its minimum.</li>
+        <li>It manages sales and users with their own permissions.</li>
+        <li>It works offline and syncs everything once the connection is back.</li></ul>
       </div>
+      <div class="plats"><span class="plat">Windows</span><span class="plat">Linux</span><span class="plat">Android</span></div>
+      
+      <div class="card-foot"><span data-i18n="foot.private">Private client project</span></div>
+    </article>
 
-      <div class="skill-card reveal">
-        <div class="skill-card-title">// Storage &amp; Platforms</div>
-        <div class="skill-tags">
-          <span class="tag tag-green">SQLite</span>
-          <span class="tag tag-neutral">Linux</span>
-          <span class="tag tag-neutral">Windows</span>
-          <span class="tag tag-neutral">Raspberry Pi</span>
-          <span class="tag tag-neutral">Arduino</span>
+    <article class="card rv">
+      <h3>📦 OnDay Logistics <span class="badge" data-i18n="badge.client">client</span></h3>
+      <div class="shot" data-shot="logistics" role="button" tabindex="0" aria-label="OnDay Logistics preview">
+        <div class="shot-chrome"><i></i><i></i><i></i><small>OnDay Logistics · Stock</small></div>
+        <div class="shot-body">
+          <table class="tb">
+            <tr><th>Código</th><th>Nome</th><th class="n">Qtd</th><th class="n">Preço un.</th><th class="n">Mín.</th></tr>
+            <tr><td>A-1042</td><td>Caixa madeira 60×40</td><td class="n">128</td><td class="n">4,20 €</td><td class="n">50</td></tr>
+            <tr><td>A-1098</td><td>Palete europeia</td><td class="n low">12</td><td class="n">11,90 €</td><td class="n low">25</td></tr>
+            <tr><td>B-2201</td><td>Filme retrátil 500mm</td><td class="n">76</td><td class="n">8,45 €</td><td class="n">30</td></tr>
+            <tr><td>C-3310</td><td>Contentor 20'</td><td class="n">3</td><td class="n">—</td><td class="n">2</td></tr>
+          </table>
+          <div class="sync"><i></i>4 registos por sincronizar · modo offline</div>
         </div>
+        <div class="shot-note" data-i18n="shot.note">Interface mockup · fictional data</div>
       </div>
-
-      <div class="skill-card reveal">
-        <div class="skill-card-title">// Quality &amp; Process</div>
-        <div class="skill-tags">
-          <span class="tag tag-purple">Manual Testing</span>
-          <span class="tag tag-purple">Test Planning</span>
-          <span class="tag tag-purple">QA</span>
-          <span class="tag tag-neutral">Agile Basics</span>
-          <span class="tag tag-neutral">Technical Docs</span>
-        </div>
+      <div class="card-body" data-i18n-html="onday.logistics">
+        <p>Built for a warehouse. It brings clients, sales, stock and containers into one place: what each container holds, when it shipped and when it arrived.</p>
+        <ul><li>It produces a proof of goods movement.</li>
+        <li>It watches minimum stock levels.</li>
+        <li>It keeps photographs as proof of delivery.</li>
+        <li>It gives each user their own permissions.</li>
+        <li>It works the same on a computer and on a phone out in the field, and when the signal goes it keeps recording and catches up afterwards.</li></ul>
       </div>
+      <div class="plats"><span class="plat">Windows</span><span class="plat">Linux</span><span class="plat">Android</span></div>
+      
+      <div class="card-foot"><span data-i18n="foot.private">Private client project</span></div>
+    </article>
 
-      <div class="skill-card reveal">
-        <div class="skill-card-title">// Tools</div>
-        <div class="skill-tags">
-          <span class="tag tag-neutral">CMake</span>
-          <span class="tag tag-neutral">Git</span>
-          <span class="tag tag-neutral">VS Code</span>
-          <span class="tag tag-neutral">Qt Creator</span>
-        </div>
-      </div>
+  </div>
 
-      <div class="skill-card reveal">
-        <div class="skill-card-title">// Languages spoken</div>
-        <div class="skill-tags">
-          <span class="tag tag-green">Portuguese (Native)</span>
-          <span class="tag tag-neutral">English (B2)</span>
-        </div>
-      </div>
-    </div>
-  </section>
+</section>
 
-  <!-- ─── Projects ──────────────────────────────────── -->
-  <section id="projects">
-    <p class="section-label reveal">$ ls -la featured/</p>
-    <h2 class="section-title reveal">Projects</h2>
-    <div class="section-line reveal"></div>
+<!-- ── open source ── -->
+<section id="oss">
+  <p class="eyebrow rv">$ gh repo list bmcsilva</p>
+  <h2 class="rv" data-i18n="oss.title">Open source</h2>
+  <div class="rule rv"></div>
+  <div class="grid g3 rv" id="repos" aria-live="polite"></div>
+  <p class="meta rv" style="margin-top:1.5rem">
+    <a href="https://github.com/bmcsilva?tab=repositories" target="_blank" rel="noopener" style="color:var(--accent)">↗ <span data-i18n="oss.all">all repositories</span></a>
+  </p>
+</section>
 
-    <div class="projects-grid">
+<!-- ── experience ── -->
+<section id="work">
+  <p class="eyebrow rv">$ git log --oneline --author=bruno</p>
+  <h2 class="rv" data-i18n="work.title">Experience</h2>
+  <div class="rule rv"></div>
+  <div class="tl">
 
-      <div class="project-card reveal">
-        <div class="project-icon">🗓️</div>
-        <div class="project-name">OnDay</div>
-        <div class="project-desc">
-          An independent cross-platform desktop application offering scheduling and planning solutions
-          for Windows and Ubuntu. Built with C and GTK3, with a Qt/QML sibling (OnDay Pro Planner)
-          under active development.
-        </div>
-        <div class="skill-tags" style="margin-top: 0.4rem;">
-          <span class="tag tag-green">C</span>
-          <span class="tag tag-green">GTK3</span>
-          <span class="tag tag-neutral">SQLite</span>
-          <span class="tag tag-neutral">Linux / Windows</span>
-        </div>
-        <div class="project-footer">
-          <a href="https://onday.pt" target="_blank" rel="noopener" class="project-link">
-            ↗ onday.pt
-          </a>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-icon">⌨️</div>
-        <div class="project-name">ZeroPad Customizer</div>
-        <div class="project-desc">
-          A free, open-source application that allows users to configure a PIM551 keypad paired with
-          a Raspberry Pi Pico W to execute custom keybinds on their computer. Currently being migrated
-          to Qt/QML + C++.
-        </div>
-        <div class="skill-tags" style="margin-top: 0.4rem;">
-          <span class="tag tag-green">C++</span>
-          <span class="tag tag-neutral">Raspberry Pi Pico W</span>
-          <span class="tag tag-neutral">Qt/QML</span>
-        </div>
-        <div class="project-footer">
-          <a href="https://github.com/bmcsilva/zeropad-customizer-app" target="_blank" rel="noopener" class="project-link">
-            ↗ github.com/bmcsilva
-          </a>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-icon">🏭</div>
-        <div class="project-name">Qt/QML Warehouse App</div>
-        <div class="project-desc">
-          A warehouse management application featuring inventory control and team operations.
-          Designed desktop-first with a future mobile target via Qt/QML — currently approaching v1.0.
-        </div>
-        <div class="skill-tags" style="margin-top: 0.4rem;">
-          <span class="tag tag-green">C++</span>
-          <span class="tag tag-green">Qt / QML</span>
-          <span class="tag tag-neutral">SQLite</span>
-          <span class="tag tag-neutral">In progress</span>
-        </div>
-        <div class="project-footer">
-          <span class="project-link" style="color: var(--muted); cursor: default;">Coming soon</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ─── Education ─────────────────────────────────── -->
-  <section id="education">
-    <p class="section-label reveal">$ cat education.log</p>
-    <h2 class="section-title reveal">Education</h2>
-    <div class="section-line reveal"></div>
-
-    <div class="education-grid">
-
-      <div class="edu-card reveal">
-        <div class="edu-period">10 / 2014 — 09 / 2016 · Barcelos, Portugal</div>
-        <div class="edu-degree">Técnico Superior Profissional em Electrónica, Automação e Comando</div>
-        <div class="edu-school">Instituto Politécnico do Cávado e do Ave</div>
-        <p style="font-size: 0.83rem; opacity: 0.7; margin-bottom: 1rem;">
-          Automation, Programming, Digital Systems &amp; Microcontrollers, Pneumatic &amp; Hydraulic Systems,
-          Automation &amp; Robotics Labs. Completed 840-hour internship at Balanças Marques.
-        </p>
-        <span class="edu-level">EQF Level 5</span>
-      </div>
-
-      <div class="edu-card reveal">
-        <div class="edu-period">09 / 2010 — 04 / 2014 · Vila Verde, Portugal</div>
-        <div class="edu-degree">Técnico de Informática de Gestão</div>
-        <div class="edu-school">Escola Secundária de Vila Verde</div>
-        <p style="font-size: 0.83rem; opacity: 0.7; margin-bottom: 1rem;">
-          Programming Languages, Information Systems &amp; Software Applications, Operating Systems.
-          Completed 420-hour internship at Escola Básica Integrada Monsenhor Elísio Araújo.
-        </p>
-        <span class="edu-level">EQF Level 4</span>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ─── Contact ───────────────────────────────────── -->
-  <section id="contact">
-    <p class="section-label reveal">$ ./contact.sh</p>
-    <h2 class="section-title reveal">Get in touch</h2>
-    <div class="section-line reveal"></div>
-
-    <p class="contact-lead reveal">
-      Open to interesting projects, collaboration, and new opportunities.
-      Feel free to reach out through any of the channels below.
-    </p>
-
-    <div class="contact-links reveal">
-
-      <a href="https://www.linkedin.com/in/bruno-m-c-silva/" target="_blank" rel="noopener" class="contact-link">
-        <!-- LinkedIn icon -->
-        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-        LinkedIn
-      </a>
-
-      <a href="https://github.com/bmcsilva" target="_blank" rel="noopener" class="contact-link">
-        <!-- GitHub icon -->
-        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-        </svg>
-        GitHub
-      </a>
-
-      <a href="https://onday.pt" target="_blank" rel="noopener" class="contact-link">
-        <!-- Globe icon -->
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="2" y1="12" x2="22" y2="12"/>
-          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
-        </svg>
-        onday.pt
-      </a>
-
-      <a href="https://www.instagram.com/bmcsilva" target="_blank" rel="noopener" class="contact-link">
-        <!-- Instagram icon -->
-        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-        </svg>
-        Instagram
-      </a>
-
+    <div class="job now rv">
+      <div class="when">01/2024 — <span data-i18n="now">present</span></div>
+      <h3 data-i18n="job1.role">Software Developer</h3>
+      <div class="at">SDILAB · Braga, Portugal</div>
+      <ul>
+        <li data-i18n="job1.a">Build software solutions in C++, using Qt for graphical interfaces and cross-platform delivery.</li>
+        <li data-i18n="job1.b">Run technical research and gather requirements with stakeholders before new features are implemented.</li>
+        <li data-i18n="job1.c">Ensure testing at unit, module, process and system level.</li>
+        <li data-i18n="job1.d">Lead the QA process and the testing culture across every stage of development.</li>
+        <li data-i18n="job1.e">Coordinate delivery-quality initiatives with the Customer Support team for alignment and final validation.</li>
+      </ul>
     </div>
 
-    <a href="mailto:brunomiguelcostadasilva@gmail.com" class="contact-email reveal">
-      brunomiguelcostadasilva@gmail.com
-    </a>
-  </section>
-
-  <!-- ─── Footer ────────────────────────────────────── -->
-  <footer>
-    <div class="footer-left">
-      ~/ <span>Bruno Silva</span> · Vila Verde, Portugal
+    <div class="job now rv">
+      <div class="when">01/2021 — <span data-i18n="now">present</span></div>
+      <h3 data-i18n="job2.role">Software Developer · Freelancer</h3>
+      <div class="at" data-i18n="job2.at">Independent · Remote</div>
+      <ul>
+        <li data-i18n="job2.a">Full-cycle development, from the first conversation with the client to delivery.</li>
+        <li data-i18n="job2.b">Requirements analysis, project management, deadlines and quality alignment.</li>
+        <li data-i18n="job2.c">Post-delivery technical support and follow-up.</li>
+        <li data-i18n="job2.d">Functional and technical documentation, plus the product website and web presence.</li>
+      </ul>
     </div>
-    <div class="footer-right">
-      <span class="footer-built-with">Built with HTML &amp; CSS</span> · <span style="color: var(--green);">2026</span>
+
+    <div class="job rv">
+      <div class="when">06/2023 — 12/2023</div>
+      <h3 data-i18n="job3.role">Software Developer · Trainee</h3>
+      <div class="at">SDILAB · Braga, Portugal</div>
+      <ul>
+        <li data-i18n="job3.a">Automated the creation of operating system images for ARM-based platforms.</li>
+        <li data-i18n="job3.b">Supported C, C++ and Python tasks, including tooling to flash images onto devices.</li>
+        <li data-i18n="job3.c">Validated the migration and compatibility of applications ported to Qt6.</li>
+      </ul>
     </div>
-  </footer>
 
-  <!-- ─── Scripts ───────────────────────────────────── -->
-  <script>
-    // Mobile nav toggle
-    const nav = document.querySelector('nav');
-    const toggle = document.getElementById('navToggle');
-    const links  = document.getElementById('navLinks');
-    const languageSwitch = document.querySelector('.lang-switch');
-    const languageButtons = Array.from(document.querySelectorAll('.lang-btn'));
-    const navAnchors = Array.from(links.querySelectorAll('a[href^="#"]'));
-    const trackedSections = navAnchors
-      .map(anchor => document.querySelector(anchor.getAttribute('href')))
-      .filter(Boolean);
-    const languageStorageKey = 'portfolio-language';
-    let activeSectionId = '';
-    let isScrollTicking = false;
+    <div class="job rv">
+      <div class="when">11/2018 — 12/2023</div>
+      <h3 data-i18n="job4.role">Manual Software Tester</h3>
+      <div class="at">SDILAB · Braga, Portugal</div>
+      <ul>
+        <li data-i18n="job4.a">Prepared and documented test plans for specific features.</li>
+        <li data-i18n="job4.b">Executed the tests and validated the results.</li>
+        <li data-i18n="job4.c">Reported outcomes to the development team, feeding continuous improvement.</li>
+      </ul>
+    </div>
 
-    const translations = {
-      en: {
-        meta: {
-          langAttribute: 'en',
-          title: 'Bruno Silva · Software Developer',
-          toggleMenuLabel: 'Toggle menu',
-          languageSelectorLabel: 'Language selector'
-        },
-        text: {
-          '.nav-links a[href="#about"]': 'About',
-          '.nav-links a[href="#experience"]': 'Experience',
-          '.nav-links a[href="#skills"]': 'Skills',
-          '.nav-links a[href="#projects"]': 'Projects',
-          '.nav-links a[href="#education"]': 'Education',
-          '.nav-links a[href="#contact"]': 'Contact',
-          '#hero .hero-label': "Hello, world. I'm",
-          '#hero .hero-title': 'Software Developer // C++ & Qt',
-          '#hero .hero-desc': 'Self-taught software developer focused on building robust desktop applications with C++ and Qt. Practical, persistent, and comfortable working with clean architecture, MVC, MVVM, software quality, and open-source projects.',
-          '#hero .hero-cta .btn-primary': 'View my journey',
-          '#hero .hero-cta a[href="#contact"]': 'Get in touch',
-          '#hero .hero-scroll-text': 'scroll to explore',
-          '#about .section-title': 'About me',
-          '#about .about-text p:nth-child(1)': 'I began my professional journey in 2016, working in production and technical support roles. Over time, I built a strong foundation in hardware, support, and manual testing.',
-          '#about .about-text p:nth-child(2)': 'In 2018, I took on the role of Manual Software Tester, where I developed key skills in functional validation, test plan creation, and communication with development teams. In 2023, I embraced the challenge of transitioning into software development — first as a trainee, and now as a Software Developer focusing on C++ and Qt.',
-          '#about .terminal-preference': "Backend > Frontend (but I'll make the UI behave)",
-          '#about .terminal-target': 'Desktop first → same app, mobile next (Qt/QML)',
-          '#experience .section-title': 'Work Experience',
-          '#experience .timeline-item:nth-child(1) .timeline-period': '01/2024 — Current',
-          '#experience .timeline-item:nth-child(1) .timeline-role': 'Software Developer',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(1)': 'Developed software solutions using the C++ programming language.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(2)': 'Leveraged the Qt framework to build graphical interfaces and cross-platform applications.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(3)': 'Conducted technical research and gathered requirements from stakeholders to support the implementation of new features.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(4)': 'Ensured the implementation of tests at the unit, module, process, and system levels.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(5)': 'Led the Quality Assurance process, fostering a testing culture throughout all stages of development.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(6)': 'Coordinated initiatives to improve delivery quality, ensuring solution robustness and collaborating with the Customer Support team for alignment and final validation.',
-          '#experience .timeline-item:nth-child(2) .timeline-role': 'Software Developer · Trainee',
-          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(1)': 'Developed automated scripts to create operating system images for ARM-based platforms.',
-          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(2)': 'Supported C, C++, and Python development tasks, including implementing procedures and tools for injecting images into devices.',
-          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(3)': 'Played a key role in software validation, focusing on the migration and compatibility of applications converted to Qt6 from various market products.',
-          '#experience .timeline-item:nth-child(3) .timeline-period': '01/2021 — Current',
-          '#experience .timeline-item:nth-child(3) .timeline-role': 'Software Developer · Freelancer',
-          '#experience .timeline-item:nth-child(3) .timeline-company': 'Independent · Remote',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(1)': 'Full-cycle software development, from concept to implementation.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(2)': 'Requirements analysis and definition in collaboration with the client.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(3)': 'Project management, ensuring deadlines, quality, and alignment with objectives.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(4)': 'Provided technical support and post-delivery follow-up.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(5)': 'Produced functional and technical documentation, as well as data analysis to support decision-making.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(6)': 'Developed the product website and related web presence as an additional deliverable.',
-          '#experience .timeline-item:nth-child(4) .timeline-role': 'Manual Software Tester',
-          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(1)': 'Prepared and documented test plans for specific features.',
-          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(2)': 'Executed defined tests and validated the results.',
-          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(3)': 'Communicated test outcomes to the development team, contributing to software refinement and ongoing improvement.',
-          '#experience .timeline-item:nth-child(5) .timeline-role': 'Customer Support',
-          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(1)': 'Delivered technical support to clients both on-site and remotely, ensuring timely and effective problem resolution.',
-          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(2)': 'Conducted manual testing of equipment and software, accurately identifying and diagnosing functional issues.',
-          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(3)': 'Carried out repairs and maintenance on electronic equipment, ensuring full operational functionality and compliance with technical standards.',
-          '#experience .timeline-item:nth-child(6) .timeline-role': 'Production Operator · Commercial Scales',
-          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(1)': 'Gathered and prepared materials for assembling scales used in grocery stores, fish markets, butcher shops, and other retail businesses.',
-          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(2)': 'Supported various stages of production and carried out the technical assembly of equipment.',
-          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(3)': 'Packaged and secured finished products, maintaining quality standards and ensuring safe transport.',
-          '#skills .section-title': 'Skills',
-          '#skills .skill-card:nth-child(1) .skill-card-title': '// Languages',
-          '#skills .skill-card:nth-child(2) .skill-card-title': '// Frameworks & Libraries',
-          '#skills .skill-card:nth-child(3) .skill-card-title': '// Storage & Platforms',
-          '#skills .skill-card:nth-child(4) .skill-card-title': '// Quality & Process',
-          '#skills .skill-card:nth-child(5) .skill-card-title': '// Tools',
-          '#skills .skill-card:nth-child(6) .skill-card-title': '// Languages spoken',
-          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(1)': 'Manual Testing',
-          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(2)': 'Test Planning',
-          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(4)': 'Agile Basics',
-          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(5)': 'Technical Docs',
-          '#skills .skill-card:nth-child(6) .skill-tags .tag:nth-child(1)': 'Portuguese (Native)',
-          '#skills .skill-card:nth-child(6) .skill-tags .tag:nth-child(2)': 'English (B2)',
-          '#projects .section-title': 'Projects',
-          '#projects .project-card:nth-child(1) .project-desc': 'An independent cross-platform desktop application offering scheduling and planning solutions for Windows and Ubuntu. Built with C and GTK3, with a Qt/QML sibling (OnDay Pro Planner) under active development.',
-          '#projects .project-card:nth-child(2) .project-desc': 'A free, open-source application that allows users to configure a PIM551 keypad paired with a Raspberry Pi Pico W to execute custom keybinds on their computer. Currently being migrated to Qt/QML + C++.',
-          '#projects .project-card:nth-child(3) .project-desc': 'A warehouse management application featuring inventory control and team operations. Designed desktop-first with a future mobile target via Qt/QML — currently approaching v1.0.',
-          '#projects .project-card:nth-child(3) .skill-tags .tag:nth-child(4)': 'In progress',
-          '#projects .project-card:nth-child(3) .project-footer .project-link': 'Coming soon',
-          '#education .section-title': 'Education and Training',
-          '#education .edu-card:nth-child(1) .edu-period': '10/11/2014 — 01/09/2016 · Barcelos, Portugal',
-          '#education .edu-card:nth-child(1) .edu-degree': 'Professional Higher Technical Course in Electronics, Automation and Control',
-          '#education .edu-card:nth-child(1) .edu-level': 'EQF Level 5',
-          '#education .edu-card:nth-child(2) .edu-period': '13/09/2010 — 30/04/2014 · Vila Verde, Portugal',
-          '#education .edu-card:nth-child(2) .edu-degree': 'Management Information Technology Technician',
-          '#education .edu-card:nth-child(2) .edu-level': 'EQF Level 4',
-          '#contact .section-title': 'Get in touch',
-          '#contact .contact-lead': 'Open to interesting projects, collaboration, and new opportunities. Feel free to reach out through any of the channels below.',
-          '.footer-built-with': 'Built with HTML & CSS'
-        },
-        html: {
-          '#about .about-text p:nth-child(3)': 'In my free time, I dedicate myself to personal projects in C, working with Arduino, Raspberry Pi, and GTK+ — including <strong style="color: var(--heading);">OnDay</strong>, an independent project offering cross-platform desktop solutions for Windows and Ubuntu. I am a self-taught, practical, and persistent professional, always looking for new challenges that allow me to grow in both software development and software quality.',
-          '#education .edu-card:nth-child(1) p': 'Socio-Cultural Training Component: Technical English. Scientific Training Component: Fundamentals of Physics, Fundamentals of Mathematics, Discrete Mathematics, and Linear Algebra. Technical Training Component: Automation, Programming, Digital Systems and Microcontrollers, Pneumatic and Hydraulic Systems, and Automation and Robotics Laboratories. Completed an 840-hour internship at Balanças Marques.',
-          '#education .edu-card:nth-child(2) p': 'Socio-Cultural Training Component: Portuguese, English, and Information and Communication Technologies. Scientific Training Component: Economics and Mathematics. Technical Training Component: Programming Languages, Information Systems and Software Applications, and Operating Systems. Completed a 420-hour internship at Escola Básica Integrada Monsenhor Elísio Araújo.'
-        }
-      },
-      pt: {
-        meta: {
-          langAttribute: 'pt-PT',
-          title: 'Bruno Silva · Programador de Software',
-          toggleMenuLabel: 'Abrir ou fechar menu',
-          languageSelectorLabel: 'Seletor de idioma'
-        },
-        text: {
-          '.nav-links a[href="#about"]': 'Sobre',
-          '.nav-links a[href="#experience"]': 'Experiência',
-          '.nav-links a[href="#skills"]': 'Competências',
-          '.nav-links a[href="#projects"]': 'Projetos',
-          '.nav-links a[href="#education"]': 'Formação',
-          '.nav-links a[href="#contact"]': 'Contacto',
-          '#hero .hero-label': 'Olá, mundo. Sou',
-          '#hero .hero-title': 'Programador de Software // C++ & Qt',
-          '#hero .hero-desc': 'Programador autodidata focado no desenvolvimento de aplicações desktop robustas com C++ e Qt. Habituado a trabalhar com clean architecture, MVC, MVVM, garantia da qualidade e projetos open source orientados para problemas reais.',
-          '#hero .hero-cta .btn-primary': 'Ver percurso',
-          '#hero .hero-cta a[href="#contact"]': 'Entrar em contacto',
-          '#hero .hero-scroll-text': 'faz scroll para explorar',
-          '#about .section-title': 'Sobre mim',
-          '#about .about-text p:nth-child(1)': 'Iniciei o meu percurso profissional em 2016, a desempenhar funções nas áreas da produção e do suporte técnico. Ao longo do tempo, construí uma base sólida em hardware, suporte e testes manuais.',
-          '#about .about-text p:nth-child(2)': 'Em 2018, assumi a função de Testador Manual de Software, onde desenvolvi competências-chave em validação funcional, elaboração de planos de teste e comunicação com equipas de desenvolvimento. Em 2023, abracei o desafio de transitar para o desenvolvimento de software — primeiro como estagiário e, atualmente, como Programador de Software com foco em C++ e Qt.',
-          '#about .terminal-preference': 'Backend > Frontend (mas faço a UI portar-se bem)',
-          '#about .terminal-target': 'Desktop primeiro → a mesma app, mobile depois (Qt/QML)',
-          '#experience .section-title': 'Experiência Profissional',
-          '#experience .timeline-item:nth-child(1) .timeline-period': '01 / 2024 — Atual',
-          '#experience .timeline-item:nth-child(1) .timeline-role': 'Programador de Software',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(1)': 'Desenvolvimento de soluções de software utilizando a linguagem C++.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(2)': 'Utilização da framework Qt para construção de interfaces gráficas e aplicações multiplataforma.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(3)': 'Realização de investigação técnica e levantamento de requisitos junto das partes interessadas, com vista à implementação de novas funcionalidades.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(4)': 'Garantia da implementação de testes ao nível unitário, modular, de processo e de sistema.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(5)': 'Liderança do processo de garantia da qualidade, promovendo uma cultura de testes ao longo de todas as fases de desenvolvimento.',
-          '#experience .timeline-item:nth-child(1) .timeline-desc li:nth-child(6)': 'Coordenação de iniciativas para melhorar a qualidade das entregas, assegurando robustez da solução e articulação com a equipa de Suporte ao Cliente para alinhamento e validação final.',
-          '#experience .timeline-item:nth-child(2) .timeline-role': 'Programador de Software · Estagiário',
-          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(1)': 'Desenvolvimento de scripts automatizados para a criação de imagens de sistemas operativos destinados a plataformas ARM.',
-          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(2)': 'Apoio em tarefas de desenvolvimento em C, C++ e Python, incluindo a implementação de procedimentos e ferramentas para injeção de imagens nos dispositivos.',
-          '#experience .timeline-item:nth-child(2) .timeline-desc li:nth-child(3)': 'Participação no processo de validação do software, com foco na migração e compatibilidade de aplicações convertidas para Qt6 em diferentes produtos do mercado.',
-          '#experience .timeline-item:nth-child(3) .timeline-period': '01 / 2021 — Atual',
-          '#experience .timeline-item:nth-child(3) .timeline-role': 'Programador de Software · Freelancer',
-          '#experience .timeline-item:nth-child(3) .timeline-company': 'Independente · Remoto',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(1)': 'Desenvolvimento integral do software, desde a conceção à implementação.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(2)': 'Análise de necessidades e definição de requisitos junto do cliente.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(3)': 'Gestão do projeto, assegurando prazos, qualidade e alinhamento com os objetivos.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(4)': 'Prestação de suporte técnico e acompanhamento pós-entrega.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(5)': 'Produção de documentação funcional e técnica, bem como análise de dados para apoio à decisão.',
-          '#experience .timeline-item:nth-child(3) .timeline-desc li:nth-child(6)': 'Desenvolvimento do website do produto e presença web associada como entrega complementar.',
-          '#experience .timeline-item:nth-child(4) .timeline-role': 'Testador Manual de Software',
-          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(1)': 'Elaboração e documentação de planos de teste para funcionalidades específicas.',
-          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(2)': 'Execução dos testes definidos e validação dos resultados obtidos.',
-          '#experience .timeline-item:nth-child(4) .timeline-desc li:nth-child(3)': 'Comunicação dos resultados de teste à equipa de desenvolvimento, contribuindo para a correção e melhoria contínua do software.',
-          '#experience .timeline-item:nth-child(5) .timeline-role': 'Apoio ao Cliente',
-          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(1)': 'Prestação de suporte técnico ao cliente, presencial e remoto, para resolução de problemas.',
-          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(2)': 'Realização de testes manuais a equipamentos e software, com identificação e diagnóstico de falhas funcionais.',
-          '#experience .timeline-item:nth-child(5) .timeline-desc li:nth-child(3)': 'Reparação e manutenção de equipamentos eletrónicos, garantindo a sua operacionalidade e conformidade técnica.',
-          '#experience .timeline-item:nth-child(6) .timeline-role': 'Operador de Produção · Balanças Comerciais',
-          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(1)': 'Recolha e preparação de materiais para a montagem de balanças destinadas a frutarias, peixarias, talhos e outros estabelecimentos comerciais, com apoio nas várias fases de produção.',
-          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(2)': 'Apoio nas várias fases de produção e montagem técnica dos equipamentos.',
-          '#experience .timeline-item:nth-child(6) .timeline-desc li:nth-child(3)': 'Embalamento e acondicionamento dos produtos finais, garantindo qualidade e segurança no transporte.',
-          '#skills .section-title': 'Competências',
-          '#skills .skill-card:nth-child(1) .skill-card-title': '// Linguagens de Programação',
-          '#skills .skill-card:nth-child(2) .skill-card-title': '// Frameworks e Bibliotecas',
-          '#skills .skill-card:nth-child(3) .skill-card-title': '// Armazenamento e Plataformas',
-          '#skills .skill-card:nth-child(4) .skill-card-title': '// Qualidade e Processo',
-          '#skills .skill-card:nth-child(5) .skill-card-title': '// Ferramentas',
-          '#skills .skill-card:nth-child(6) .skill-card-title': '// Idiomas',
-          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(1)': 'Testes Manuais',
-          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(2)': 'Planeamento de Testes',
-          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(4)': 'Conhecimentos básicos de Agile',
-          '#skills .skill-card:nth-child(4) .skill-tags .tag:nth-child(5)': 'Documentação Técnica',
-          '#skills .skill-card:nth-child(6) .skill-tags .tag:nth-child(1)': 'Português (Nativo)',
-          '#skills .skill-card:nth-child(6) .skill-tags .tag:nth-child(2)': 'Inglês (B2)',
-          '#projects .section-title': 'Projetos',
-          '#projects .project-card:nth-child(1) .project-desc': 'Uma aplicação desktop independente e multiplataforma orientada para soluções de agendamento e planeamento em Windows e Ubuntu. Desenvolvida em C e GTK3, com uma versão irmã em Qt/QML (OnDay Pro Planner) em desenvolvimento.',
-          '#projects .project-card:nth-child(2) .project-desc': 'Uma aplicação gratuita e open source que permite configurar um keypad PIM551 ligado a um Raspberry Pi Pico W para executar atalhos personalizados no computador. Está atualmente em migração para Qt/QML + C++.',
-          '#projects .project-card:nth-child(3) .project-desc': 'Uma aplicação de gestão de armazém com controlo de inventário e operações de equipa. Pensada primeiro para desktop, com objetivo futuro para mobile via Qt/QML — neste momento a aproximar-se da v1.0.',
-          '#projects .project-card:nth-child(3) .skill-tags .tag:nth-child(4)': 'Em curso',
-          '#projects .project-card:nth-child(3) .project-footer .project-link': 'Em breve',
-          '#education .section-title': 'Educação e Formação',
-          '#education .edu-card:nth-child(1) .edu-period': '10/11/2014 — 01/09/2016 · Barcelos, Portugal',
-          '#education .edu-card:nth-child(1) .edu-degree': 'Técnico Superior Profissional em Electrónica, Automação e Comando',
-          '#education .edu-card:nth-child(1) .edu-level': 'Nível 5 do QEQ',
-          '#education .edu-card:nth-child(2) .edu-period': '13/09/2010 — 30/04/2014 · Vila Verde, Portugal',
-          '#education .edu-card:nth-child(2) .edu-degree': 'Técnico de Informática de Gestão',
-          '#education .edu-card:nth-child(2) .edu-level': 'Nível 4 do QEQ',
-          '#contact .section-title': 'Entrar em contacto',
-          '#contact .contact-lead': 'Aberto a projetos interessantes, colaborações e novas oportunidades. Podes entrar em contacto por qualquer um dos canais abaixo.',
-          '.footer-built-with': 'Construído com HTML & CSS'
-        },
-        html: {
-          '#about .about-text p:nth-child(3)': 'No meu tempo livre, dedico-me a projetos pessoais em C, trabalhando com Arduino, Raspberry Pi e GTK+, incluindo o <strong style="color: var(--heading);">OnDay</strong>, um projeto independente orientado para soluções desktop multiplataforma para Windows e Ubuntu. Sou autodidata, prático e persistente, sempre à procura de novos desafios que me permitam crescer tanto no desenvolvimento de software como na qualidade de software.',
-          '#education .edu-card:nth-child(1) p': 'Componente sócio-cultural: Inglês Técnico. Componente científica: Fundamentos de Física, Fundamentos de Matemática, Matemática Discreta e Álgebra Linear. Componente técnica: Automação, Programação, Sistemas Digitais e Microcontroladores, Sistemas Pneumáticos e Hidráulicos, Laboratórios de Automação e Robótica. Estágio de 840 horas na Balanças Marques.',
-          '#education .edu-card:nth-child(2) p': 'Componente sócio-cultural: Português, Inglês e Tecnologias da Informação e Comunicação. Componente científica: Economia e Matemática. Componente técnica: Linguagens de Programação, Sistemas de Informação e Aplicações Informáticas e Sistemas de Exploração. Estágio de 420 horas na Escola Básica Integrada Monsenhor Elísio Araújo.'
-        }
-      }
-    };
+    <div class="job rv">
+      <div class="when">11/2017 — 11/2018</div>
+      <h3 data-i18n="job5.role">Customer Support</h3>
+      <div class="at">Balanças Marques · Braga, Portugal</div>
+      <ul>
+        <li data-i18n="job5.a">On-site and remote technical support, diagnosing equipment and software issues.</li>
+        <li data-i18n="job5.b">Repaired and maintained electronic equipment to technical standards.</li>
+      </ul>
+    </div>
 
-    const applyContentTranslations = (entries, useHtml = false) => {
-      Object.entries(entries).forEach(([selector, value]) => {
-        const element = document.querySelector(selector);
-        if (!element) {
-          return;
-        }
+    <div class="job rv">
+      <div class="when">09/2016 — 11/2017</div>
+      <h3 data-i18n="job6.role">Production Operator · Commercial Scales</h3>
+      <div class="at">Balanças Marques · Braga, Portugal</div>
+      <ul>
+        <li data-i18n="job6.a">Prepared materials and assembled scales for grocery stores, fish markets and butcher shops.</li>
+        <li data-i18n="job6.b">Supported production stages, packaging and quality standards.</li>
+      </ul>
+    </div>
 
-        if (useHtml) {
-          element.innerHTML = value;
-          return;
-        }
+  </div>
+</section>
 
-        element.textContent = value;
-      });
-    };
+<!-- ── stack ── -->
+<section id="stack">
+  <p class="eyebrow rv">$ cat stack.json</p>
+  <h2 class="rv" data-i18n="stack.title">Stack</h2>
+  <div class="rule rv"></div>
+  <div class="grid g3">
+    <div class="card rv"><h3 data-i18n="stack.lang">Languages</h3>
+      <div class="tags"><span class="tag hi">C++20</span><span class="tag hi">C</span><span class="tag">Python</span><span class="tag">QML / JS</span><span class="tag">Bash</span><span class="tag">SQL</span></div></div>
+    <div class="card rv"><h3 data-i18n="stack.fw">Frameworks</h3>
+      <div class="tags"><span class="tag hi">Qt 6</span><span class="tag hi">Qt Quick</span><span class="tag">Qt Network</span><span class="tag">Qt SQL</span><span class="tag">GTK3</span><span class="tag">ZXing</span></div></div>
+    <div class="card rv"><h3 data-i18n="stack.plat">Platforms &amp; hardware</h3>
+      <div class="tags"><span class="tag hi">Linux</span><span class="tag hi">Windows</span><span class="tag">Android</span><span class="tag">Raspberry Pi</span><span class="tag">Pico W</span><span class="tag">Fingerprint</span><span class="tag">RFID</span></div></div>
+    <div class="card rv"><h3 data-i18n="stack.arch">Architecture</h3>
+      <div class="tags"><span class="tag">MVC</span><span class="tag">MVVM</span><span class="tag">Clean Architecture</span><span class="tag">SQLite</span><span class="tag">REST</span><span class="tag">MQTT</span><span class="tag">WebSocket</span></div></div>
+    <div class="card rv"><h3 data-i18n="stack.qa">Quality</h3>
+      <div class="tags"><span class="tag hi">QA lead</span><span class="tag">Test planning</span><span class="tag">Unit / system tests</span><span class="tag">Technical docs</span><span class="tag">Agile</span></div></div>
+    <div class="card rv"><h3 data-i18n="stack.tools">Tools</h3>
+      <div class="tags"><span class="tag">CMake</span><span class="tag">Git</span><span class="tag">Qt Creator</span><span class="tag">VS Code</span><span class="tag">MinGW</span></div></div>
+  </div>
+</section>
 
-    const readStoredLanguage = () => {
-      try {
-        return window.localStorage.getItem(languageStorageKey);
-      } catch {
-        return null;
-      }
-    };
+<!-- ── education ── -->
+<section id="education">
+  <p class="eyebrow rv">$ cat education.log</p>
+  <h2 class="rv" data-i18n="edu.title">Education</h2>
+  <div class="rule rv"></div>
+  <div class="grid g2">
+    <div class="card rv">
+      <div class="when">2014 — 2016 · Barcelos, Portugal</div>
+      <h3 data-i18n="edu1.deg">Professional Higher Technical Course · Electronics, Automation and Control</h3>
+      <p class="edu-at">Instituto Politécnico do Cávado e do Ave</p>
+      <p data-i18n="edu1.desc">Automation, programming, digital systems and microcontrollers, pneumatic and hydraulic systems, robotics labs. 840-hour internship at Balanças Marques.</p>
+      <div class="tags"><span class="tag hi">EQF Level 5</span></div>
+    </div>
+    <div class="card rv">
+      <div class="when">2010 — 2014 · Vila Verde, Portugal</div>
+      <h3 data-i18n="edu2.deg">Management Information Technology Technician</h3>
+      <p class="edu-at">Escola Secundária de Vila Verde</p>
+      <p data-i18n="edu2.desc">Programming languages, information systems and software applications, operating systems. 420-hour internship at Escola Básica Integrada Monsenhor Elísio Araújo.</p>
+      <div class="tags"><span class="tag hi">EQF Level 4</span></div>
+    </div>
+  </div>
+</section>
 
-    const storeLanguage = (language) => {
-      try {
-        window.localStorage.setItem(languageStorageKey, language);
-      } catch {
-        // Ignore storage failures and keep the chosen language only for the session.
-      }
-    };
+<!-- ── spoken languages ── -->
+<section id="languages">
+  <p class="eyebrow rv">$ locale -a</p>
+  <h2 class="rv" data-i18n="lang.title">Spoken languages</h2>
+  <div class="rule rv"></div>
+  <div class="grid g2">
+    <div class="card rv">
+      <h3>Português <span class="badge live" data-i18n="lang.pt.level">native</span></h3>
+      <p data-i18n="lang.pt.note">Mother tongue. Client conversations, requirements gathering and all the technical documentation I write day to day.</p>
+    </div>
+    <div class="card rv">
+      <h3>English <span class="badge" data-i18n="lang.en.level">B2</span></h3>
+      <p data-i18n="lang.en.note">Comfortable reading specifications, framework documentation and code review in English, and writing it. Spoken English is where I am still improving.</p>
+    </div>
+  </div>
+</section>
 
-    const applyTranslations = (language) => {
-      const nextLanguage = translations[language] ? language : 'en';
-      const translationSet = translations[nextLanguage];
+<!-- ── contact ── -->
+<section id="contact">
+  <p class="eyebrow rv">$ ./contact.sh</p>
+  <h2 class="rv" data-i18n="contact.title">Let's talk</h2>
+  <div class="rule rv"></div>
+  <p class="sub rv" style="margin-inline:auto" data-i18n="contact.sub">Open to interesting projects, collaboration and new opportunities — freelance or full-time, remote or around Braga.</p>
+  <div class="channels rv">
+    <a class="ch" href="https://github.com/bmcsilva" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
+    <a class="ch" href="https://www.linkedin.com/in/bruno-m-c-silva/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
+    <a class="ch" href="https://onday.pt" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>onday.pt</a>
+    <a class="ch" href="https://www.instagram.com/bmcsilva" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>Instagram</a>
+  </div>
+  <a class="mail rv" href="mailto:brunomiguelcostadasilva@gmail.com">brunomiguelcostadasilva@gmail.com</a>
+</section>
 
-      document.documentElement.lang = translationSet.meta.langAttribute || nextLanguage;
-      document.title = translationSet.meta.title;
-      toggle.setAttribute('aria-label', translationSet.meta.toggleMenuLabel);
+<footer>
+  <div>~/ <b>Bruno Silva</b> · Vila Verde, Portugal</div>
+  <div><span data-i18n="footer.built">Static HTML · hosted on GitHub Pages</span> · <span id="year"></span></div>
+</footer>
 
-      if (languageSwitch) {
-        languageSwitch.setAttribute('aria-label', translationSet.meta.languageSelectorLabel);
-      }
+<!-- ── dock ── -->
+<div class="dock" id="dock">
+  <a class="dock-home" href="#hero" aria-label="Top">~/</a>
+  <a class="s" href="#about" data-i18n="nav.about">About</a>
+  <a class="s" href="#onday" data-i18n="nav.onday">OnDay</a>
+  <a class="s" href="#oss" data-i18n="nav.oss">Open Source</a>
+  <a class="s" href="#work" data-i18n="nav.work">Experience</a>
+  <a class="s" href="#stack" data-i18n="nav.stack">Stack</a>
+  <a class="s" href="#education" data-i18n="nav.edu">Education</a>
+  <a class="s" href="#contact" data-i18n="nav.contact">Contact</a>
+  <span class="sep"></span>
+  <div class="pill" role="group" aria-label="Language">
+    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+    <button type="button" data-lang="pt" aria-pressed="false">PT</button>
+  </div>
+  <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme">
+    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+</div>
 
-      applyContentTranslations(translationSet.text);
-      applyContentTranslations(translationSet.html, true);
+<button class="totop" id="totop" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
-      languageButtons.forEach(button => {
-        const isActive = button.dataset.lang === nextLanguage;
-        button.classList.toggle('active', isActive);
-        button.setAttribute('aria-pressed', String(isActive));
-      });
-    };
+<dialog id="lb"><div class="lb-wrap">
+  <div class="lb" id="lb-body"></div>
+  <button class="lb-close" type="button" aria-label="Close">✕</button>
+  <div class="lb-bar"><span id="lb-count"></span>
+    <span id="lb-nav" hidden>
+      <button id="lb-prev" type="button" aria-label="Previous">‹</button>
+      <button id="lb-next" type="button" aria-label="Next">›</button>
+    </span>
+  </div></div></dialog>
 
-    const storedLanguage = readStoredLanguage();
-    const browserLanguage = navigator.language?.toLowerCase().startsWith('pt') ? 'pt' : 'en';
-    const initialLanguage = translations[storedLanguage] ? storedLanguage : browserLanguage;
+<script>
+/* ─────────── i18n ─────────── */
+const I18N = {
+  pt: {
+    "meta.lang":"pt-PT","meta.title":"Bruno Silva · Programador C++ / Qt",
+    "nav.about":"Sobre","nav.onday":"OnDay","nav.oss":"Open Source","nav.work":"Percurso","nav.stack":"Stack","nav.edu":"Formação","nav.contact":"Contacto",
+    "hero.status":"Disponível para freelance e full-time","hero.role":"Programador de Software // C++ & Qt",
+    "hero.desc":"Programador autodidata focado no desenvolvimento de aplicações desktop robustas com C++ e Qt. Habituado a trabalhar com clean architecture, MVC, MVVM, garantia da qualidade e projetos open source orientados para problemas reais.",
+    "hero.cta1":"Os meus projetos","hero.cta2":"Entrar em contacto",
+    "fact.years":"anos em software","fact.products":"produtos OnDay entregues","fact.repos":"repositórios públicos","fact.stack":"stack diário",
+    "about.title":"Da linha de produção ao código",
+    "about.p1":"Iniciei o meu percurso profissional em 2016, a desempenhar funções nas áreas da produção e do suporte técnico. Ao longo do tempo, construí uma base sólida em hardware, suporte e testes manuais.",
+    "about.p2":"Em 2018, assumi a função de Testador Manual de Software, onde desenvolvi competências-chave em validação funcional, elaboração de planos de teste e comunicação com equipas de desenvolvimento. Em 2023, abracei o desafio de transitar para o desenvolvimento de software — primeiro como estagiário e, atualmente, como Programador de Software com foco em C++ e Qt.",
+    "about.p3":"No meu tempo livre, dedico-me a projetos pessoais em C, trabalhando com Arduino, Raspberry Pi e GTK+, incluindo o <strong>OnDay</strong>, um projeto independente orientado para soluções desktop multiplataforma para Windows e Ubuntu. Sou autodidata, prático e persistente, sempre à procura de novos desafios que me permitam crescer tanto no desenvolvimento de software como na qualidade de software.",
+    "term.focus":"Backend primeiro — mas a UI vai portar-se bem",
+    "onday.title":"A família OnDay",
+    "onday.sub":"Uma linha de produtos feitos para negócios reais — cada um nasceu de um cliente que ainda fazia o trabalho em papel.",
+    "onday.core":"<p>O terminal fica na área de produção. Os trabalhadores identificam-se por impressão digital, cartão RFID ou usam as suas credenciais e utilizam-no para:</p><ul><li>Registar a entrada e a saída.</li><li>Abrir e fechar as obras em que estão a trabalhar, associando o tempo gasto à obra e à tarefa corretas.</li></ul><p>No fim do dia, o sistema gera relatórios e folhas de obra impressos. Do lado da administração, gerem-se trabalhadores, clientes, obras, tarefas e horários, e corrigem-se registos de ponto quando alguém se esquece de picar.</p>",
+    "onday.planner":"<p>Planeia o trabalho de uma equipa. Cada atividade (obra) tem o seu quadro, com uma posição fixa para cada trabalhador, e as tarefas são geridas de forma reutilizável, para que o trabalho repetido nunca seja escrito duas vezes.</p><ul><li>Agrupam-se trabalhadores.</li><li>Montam-se ordens de serviço a partir dessas tarefas recorrentes.</li><li>O resumo mostra quanto está pendente, em execução e concluído.</li><li>Uma obra fechada no terminal aparece concluída aqui.</li><li>Uma tarefa também pode ser fechada deste lado.</li></ul>",
+    "onday.tintas":"<p>Feito para uma loja de tintas. Guarda as fórmulas de cor de cada cliente e mede a proximidade da mistura em relação à cor pedida, para que uma receita seja reaproveitada sempre que a mesma cor volta, em vez de ser afinada de novo.</p><ul><li>Cada encomenda percorre os seus estados, do pedido ao balcão até à produção e à entrega.</li><li>Gere o stock, avisando quando um artigo desce abaixo do mínimo.</li><li>Gere vendas e utilizadores com as suas permissões.</li><li>Funciona offline e sincroniza tudo quando a ligação é restabelecida.</li></ul>",
+    "onday.logistics":"<p>Feito para um armazém. Junta num só sítio os clientes, as vendas, o stock e os contentores: o que cada contentor guarda, quando foi enviado e quando chegou.</p><ul><li>Gera um comprovativo de movimentação de mercadoria.</li><li>Vigia os mínimos de stock.</li><li>Guarda fotografias como comprovativo de entrega.</li><li>Dá a cada utilizador as suas permissões.</li><li>Funciona igual no computador e no telemóvel em campo, e quando o sinal falha continua a registar e recupera depois.</li></ul>",
+    "onday.since":"desde 2021","badge.product":"produto","badge.client":"cliente",
+    "foot.private":"Projeto privado de cliente","shot.note":"Mockup da interface · dados fictícios","shot.real":"Screenshot real · dados fictícios",
+    "oss.title":"Open source","oss.all":"todos os repositórios","oss.updated":"atualizado",
+    "work.title":"Percurso","now":"atual",
+    "job1.role":"Programador de Software",
+    "job1.a":"Desenvolvimento de soluções em C++, usando Qt para interfaces gráficas e entrega multiplataforma.",
+    "job1.b":"Investigação técnica e levantamento de requisitos com stakeholders antes de implementar novas funcionalidades.",
+    "job1.c":"Garantia de testes ao nível de unidade, módulo, processo e sistema.",
+    "job1.d":"Liderança do processo de QA e da cultura de testes em todas as fases do desenvolvimento.",
+    "job1.e":"Coordenação de iniciativas de qualidade de entrega com a equipa de Customer Support para alinhamento e validação final.",
+    "job2.role":"Programador de Software · Freelancer","job2.at":"Independente · Remoto",
+    "job2.a":"Desenvolvimento de ciclo completo, da primeira conversa com o cliente até à entrega.",
+    "job2.b":"Análise de requisitos, gestão de projeto, prazos e alinhamento de qualidade.",
+    "job2.c":"Suporte técnico e acompanhamento pós-entrega.",
+    "job2.d":"Documentação funcional e técnica, além do site do produto e presença web.",
+    "job3.role":"Programador de Software · Estagiário",
+    "job3.a":"Automatização da criação de imagens de sistema operativo para plataformas ARM.",
+    "job3.b":"Apoio em tarefas de C, C++ e Python, incluindo ferramentas para injetar imagens nos dispositivos.",
+    "job3.c":"Validação da migração e compatibilidade de aplicações convertidas para Qt6.",
+    "job4.role":"Testador Manual de Software",
+    "job4.a":"Preparação e documentação de planos de teste para funcionalidades específicas.",
+    "job4.b":"Execução dos testes e validação dos resultados.",
+    "job4.c":"Reporte de resultados à equipa de desenvolvimento, alimentando a melhoria contínua.",
+    "job5.role":"Suporte ao Cliente",
+    "job5.a":"Suporte técnico presencial e remoto, diagnosticando problemas de equipamento e software.",
+    "job5.b":"Reparação e manutenção de equipamento eletrónico segundo normas técnicas.",
+    "job6.role":"Operador de Produção · Balanças Comerciais",
+    "job6.a":"Preparação de materiais e montagem de balanças para mercearias, peixarias e talhos.",
+    "job6.b":"Apoio às várias fases de produção, embalamento e padrões de qualidade.",
+    "stack.title":"Stack","stack.lang":"Linguagens","stack.fw":"Frameworks","stack.plat":"Plataformas e hardware",
+    "stack.arch":"Arquitetura","stack.qa":"Qualidade","stack.tools":"Ferramentas",
+    "edu.title":"Formação",
+    "lang.title":"Idiomas falados","lang.pt.level":"nativo","lang.en.level":"B2",
+    "lang.pt.note":"Língua materna. Conversas com clientes, levantamento de requisitos e toda a documentação técnica que escrevo no dia a dia.",
+    "lang.en.note":"À vontade a ler especificações, documentação de frameworks e code review em inglês, e a escrevê-lo. O inglês falado é onde ainda estou a melhorar.",
+    "edu1.deg":"Técnico Superior Profissional em Eletrónica, Automação e Comando",
+    "edu1.desc":"Automação, programação, sistemas digitais e microcontroladores, sistemas pneumáticos e hidráulicos, laboratórios de robótica. Estágio de 840 horas na Balanças Marques.",
+    "edu2.deg":"Técnico de Informática de Gestão",
+    "edu2.desc":"Linguagens de programação, sistemas de informação e aplicações de software, sistemas operativos. Estágio de 420 horas na Escola Básica Integrada Monsenhor Elísio Araújo.",
+    "contact.title":"Vamos falar",
+    "contact.sub":"Aberto a projetos interessantes, colaborações e novas oportunidades — freelance ou full-time, remoto ou pela zona de Braga.",
+    "footer.built":"HTML estático · alojado no GitHub Pages"
+  }
+};
+const EN = {"oss.updated":"updated",
+  "meta.title":"Bruno Silva · C++ / Qt Developer", "meta.lang":"en",
+  "shot.real":"Real screenshot · fictional data"};            // the rest of EN lives in the markup itself
+const el = (s, r=document) => r.querySelector(s);
+const all = (s, r=document) => [...r.querySelectorAll(s)];
+let current = (() => {              // Portuguese is the primary language: English is opt-in
+  try { return localStorage.getItem("lang") || "pt"; } catch { return "pt"; }
+})();
+const t = k => (current === "pt" ? I18N.pt[k] : EN[k]) || EN[k] || k;
 
-    toggle.addEventListener('click', () => {
-      links.classList.toggle('open');
-    });
+function translate(lang){
+  if (!EN.captured){                             // markup is the English source
+    all("[data-i18n]").forEach(n => EN[n.dataset.i18n] = n.textContent);
+    all("[data-i18n-html]").forEach(n => EN[n.dataset.i18nHtml] = n.innerHTML);
+    EN.captured = true;
+  }
+  current = lang;
+  const d = lang === "pt" ? I18N.pt : EN;
+  all("[data-i18n]").forEach(n => { const v = d[n.dataset.i18n]; if (v) n.textContent = v; });
+  all("[data-i18n-html]").forEach(n => { const v = d[n.dataset.i18nHtml]; if (v) n.innerHTML = v; });
+  document.documentElement.lang = d["meta.lang"];
+  document.title = d["meta.title"];
+  all(".pill button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  try { localStorage.setItem("lang", lang); } catch {}
+  renderRepos();                                 // repo cards carry translated labels
+}
+all(".pill button").forEach(b => b.onclick = () => translate(b.dataset.lang));
 
-    languageButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const nextLanguage = button.dataset.lang;
-        applyTranslations(nextLanguage);
-        storeLanguage(nextLanguage);
-      });
-    });
+/* ─────────── theme ─────────── */
+const setTheme = v => {
+  document.documentElement.dataset.theme = v;
+  el('meta[name="theme-color"]').content = v === "light" ? "#f6f8fc" : "#070b14";
+  try { localStorage.setItem("theme", v); } catch {}
+};
+try {
+  const saved = localStorage.getItem("theme");
+  setTheme(saved || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"));
+} catch { setTheme("dark"); }
+el("#theme").onclick = () => setTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
 
-    // Close nav on link click (mobile)
-    const setActiveNavLink = (sectionId) => {
-      if (activeSectionId === sectionId) {
-        return;
-      }
+/* ─────────── app previews ─────────── */
+// Real screenshots, taken from the apps running against a database seeded with
+// invented data. First entry is the card preview; the lightbox walks the list.
+// An entry with no shots keeps the CSS mockup that is already in the markup.
+const SHOTS = {
+  "onday": [
+    {file:"onday-terminal.png",      en:"The shop-floor terminal: pick a worker, or identify with fingerprint or RFID",
+                                     pt:"O terminal de chão de fábrica: escolher o trabalhador, ou identificar-se por impressão digital ou RFID"}
+  ],
+  "planner": [
+    {file:"planner-resumo.png",      en:"Planning summary: blocks, tasks and what is still pending",
+                                     pt:"Resumo do planeamento: blocos, tarefas e o que falta concluir"},
+    {file:"planner-dicionario.png",  en:"The CSV dictionary the reusable task list is imported from",
+                                     pt:"O dicionário CSV de onde se importa a lista de tarefas reutilizáveis"}
+  ],
+  "tintas": [
+    {file:"tintas-combinacoes.png",  en:"Colour combinations, produced and still pending, per client",
+                                     pt:"Combinações de cor, produzidas e ainda pendentes, por cliente"},
+    {file:"tintas-stock.png",        en:"Stock, with everything under its minimum flagged in red",
+                                     pt:"Stock, com tudo abaixo do mínimo assinalado a vermelho"}
+  ],
+  "logistics": [
+    {file:"logistics-transporte.png",en:"Containers at each stage: shipped, arrived, confirmed",
+                                     pt:"Contentores em cada fase: enviado, chegado, confirmado"},
+    {file:"logistics-stock.png",     en:"Warehouse stock with minimum levels and categories",
+                                     pt:"Stock do armazém com mínimos e categorias"},
+    {file:"logistics-menu.png",      en:"Back office entry point",
+                                     pt:"Entrada do back office"}
+  ]
+};
+const cap = s => s[current] || s.en;
 
-      activeSectionId = sectionId;
+all("[data-shot]").forEach(node => {
+  const list = SHOTS[node.dataset.shot];
+  if (!list || !list.length) return;
+  const probe = new Image();
+  probe.onload = () => {                          // only swap once the file really loads
+    const note = el(".shot-note", node)?.outerHTML || "";
+    node.innerHTML = `<img src="images/${list[0].file}" alt="${cap(list[0])}" loading="lazy">`
+      + `<div class="shot-note" data-i18n="shot.real">Real screenshot · fictional data</div>`;
+    node.classList.add("has-img");
+    translate(current);                            // the swapped-in note needs translating too
+  };
+  probe.src = `images/${list[0].file}`;
+});
 
-      navAnchors.forEach(anchor => {
-        const isActive = sectionId !== '' && anchor.getAttribute('href') === `#${sectionId}`;
-        anchor.classList.toggle('active', isActive);
+const lb = el("#lb"), lbBody = el("#lb-body");
+let tour = [], at = 0;
 
-        if (isActive) {
-          anchor.setAttribute('aria-current', 'page');
-          return;
-        }
+function paint(){
+  if (!tour.length) return;
+  const shot = tour[at];
+  lbBody.innerHTML = `<div class="shot">
+      <img src="images/${shot.file}" alt="${cap(shot)}">
+      <div class="shot-note"></div>
+    </div>`;
+  el(".shot-note", lbBody).textContent = `${cap(shot)} · ${t("shot.real")}`;
+  el("#lb-count").textContent = `${at + 1} / ${tour.length}`;
+  el("#lb-nav").hidden = tour.length < 2;
+}
+const step = d => { at = (at + d + tour.length) % tour.length; paint(); };
 
-        anchor.removeAttribute('aria-current');
-      });
-    };
+function openShot(node){
+  tour = SHOTS[node.dataset.shot] || [];
+  at = 0;
+  if (tour.length) { paint(); }
+  else {                                           // no screenshot yet: show the mockup
+    lbBody.innerHTML = `<div class="shot">${node.innerHTML}</div>`;
+    el("#lb-count").textContent = "";
+    el("#lb-nav").hidden = true;
+  }
+  lb.showModal();
+}
+all("[data-shot]").forEach(node => {
+  node.addEventListener("click", () => openShot(node));
+  node.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openShot(node); }
+  });
+});
+el(".lb-close").onclick = () => lb.close();
+el("#lb-prev").onclick = () => step(-1);
+el("#lb-next").onclick = () => step(1);
+lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });   // click the backdrop
+lb.addEventListener("keydown", e => {
+  if (!tour.length) return;
+  if (e.key === "ArrowLeft")  { e.preventDefault(); step(-1); }
+  if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+});
 
-    const updateActiveSection = () => {
-      if (!trackedSections.length) {
-        return;
-      }
+/* ─────────── live repos ─────────── */
+// Hand-written blurbs win over GitHub's one-liner; anything else falls back to the API description.
+const BLURB = {
+  "zeropad-customizer-app": {
+    en:"A free, open-source app to configure a PIM551 keypad on a Raspberry Pi Pico W and run your own keybinds on the computer. Currently being ported to C++ and Qt/QML.",
+    pt:"Aplicação livre e open-source para configurar um keypad PIM551 num Raspberry Pi Pico W e correr os teus próprios atalhos no computador. A ser migrada para C++ e Qt/QML."
+  },
+  "zxing-qr-reader": {
+    en:"A QR reader built on the ZXing library: reads a code with the camera and shows the whole content without truncating it, ready to select, copy or open. Qt 6 and QML on top, C++20 underneath, follows the system light or dark theme.",
+    pt:"Leitor de QR construído sobre a biblioteca ZXing: lê o código com a câmara e mostra o conteúdo completo sem cortar, pronto a selecionar, copiar ou abrir. Qt 6 e QML à frente, C++20 por baixo, e segue o tema claro ou escuro do sistema."
+  }
+};
+// Snapshot used when the API is unreachable or rate-limited (60 req/h per IP, unauthenticated).
+const FALLBACK = [
+  {name:"zxing-qr-reader", language:"QML", stargazers_count:0, pushed_at:"2026-08-12T10:32:05Z",
+   html_url:"https://github.com/bmcsilva/zxing-qr-reader",
+   description:"Android QR reader (Qt6/QML) powered by ZXing — full content, no truncation, with select & copy."},
+  {name:"zeropad-customizer-app", language:null, stargazers_count:4, pushed_at:"2023-09-25T17:13:04Z",
+   html_url:"https://github.com/bmcsilva/zeropad-customizer-app",
+   description:"A free program to configure a PIM551 keypad and a Raspberry Pi Pico W to execute keybinds on our computer."}
+];
+const PLATFORMS = {
+  "zxing-qr-reader": ["Android", "iOS", "Windows", "macOS", "Linux"],
+  "zeropad-customizer-app": ["Windows", "Linux", "Raspberry Pi Pico W"]
+};
+const HIDE = new Set(["Test", "bmcsilva", "portfolio"]);
+const LANG_COLOR = {"C++":"#f34b7d", C:"#555555", QML:"#44a51c", Python:"#3572A5", JavaScript:"#f1e05a", HTML:"#e34c26"};
+let repos = null;
 
-      const navHeight = nav ? nav.offsetHeight : 0;
-      const activationLine = navHeight + (window.innerHeight * 0.3);
-      const firstSection = trackedSections[0];
+const fmtDate = iso => new Date(iso).toLocaleDateString(current === "pt" ? "pt-PT" : "en-GB",
+  {month:"short", year:"numeric"});
 
-      if (window.scrollY + activationLine < firstSection.offsetTop) {
-        setActiveNavLink('');
-        return;
-      }
+function renderRepos(){
+  const box = el("#repos");
+  if (!repos){ box.innerHTML = `<p class="meta">$ fetching…</p>`; return; }
+  box.innerHTML = repos.map(r => {
+    const blurb = BLURB[r.name]?.[current] || r.description || "";
+    const color = LANG_COLOR[r.language] || "var(--violet)";
+    const plats = PLATFORMS[r.name];
+    return `<article class="card">
+      <h3>${r.name}</h3>
+      <p>${blurb}</p>
+      ${plats ? `<div class="plats">${
+        plats.map(x => `<span class="plat">${x}</span>`).join("")}</div>` : ""}
+      <div class="meta">
+        ${r.language ? `<span><i class="lang-dot" style="background:${color}"></i>${r.language}</span>` : ""}
+        <span>★ ${r.stargazers_count}</span>
+        <span>${t("oss.updated")} ${fmtDate(r.pushed_at)}</span>
+      </div>
+      <div class="card-foot"><span class="badge live">open source</span>
+        <a href="${r.html_url}" target="_blank" rel="noopener">↗ github</a></div>
+    </article>`;
+  }).join("");
+}
 
-      let currentSectionId = firstSection.id;
+fetch("https://api.github.com/users/bmcsilva/repos?per_page=100&sort=pushed")
+  .then(r => r.ok ? r.json() : Promise.reject(r.status))
+  .then(list => {
+    repos = list.filter(r => !r.fork && !HIDE.has(r.name))
+                .sort((a,b) => b.stargazers_count - a.stargazers_count || b.pushed_at.localeCompare(a.pushed_at));
+    if (!repos.length) repos = FALLBACK;
+    el("#f-repos").textContent = list.filter(r => !r.fork).length;
+  })
+  .catch(() => { repos = FALLBACK; el("#f-repos").textContent = FALLBACK.length; })
+  .finally(renderRepos);
 
-      trackedSections.forEach(section => {
-        if (section.getBoundingClientRect().top <= activationLine) {
-          currentSectionId = section.id;
-        }
-      });
+/* ─────────── dock, back to top, reveal ─────────── */
+el("#year").textContent = new Date().getFullYear();
+el("#f-years").textContent = new Date().getFullYear() - 2016;   // since the first tech role
 
-      const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
-      if (window.scrollY >= maxScrollY - 4) {
-        currentSectionId = trackedSections[trackedSections.length - 1].id;
-      }
+const dock = el("#dock"), totop = el("#totop"), dockLinks = all(".dock a.s");
+totop.onclick = () => scrollTo({top:0, behavior:"smooth"});
+addEventListener("scroll", () => {
+  totop.classList.toggle("show", scrollY > 600);
+  // "~/" and back-to-top land here, above every section: nothing should stay lit
+  if (scrollY < 140) dockLinks.forEach(a => a.classList.remove("on"));
+}, {passive:true});
 
-      setActiveNavLink(currentSectionId);
-    };
+const spy = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) dockLinks.forEach(a =>
+    a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id)); });
+}, {rootMargin:"-30% 0px -60% 0px"});
+[el("#hero"), ...dockLinks.map(a => el(a.getAttribute("href")))]
+  .filter(Boolean).forEach(s => spy.observe(s));
 
-    const scheduleActiveSectionUpdate = () => {
-      if (isScrollTicking) {
-        return;
-      }
+const rev = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); rev.unobserve(e.target); } });
+}, {threshold:.1});
+all(".rv").forEach((n, i) => { n.style.transitionDelay = `${(i % 6) * 60}ms`; rev.observe(n); });
 
-      isScrollTicking = true;
-      window.requestAnimationFrame(() => {
-        updateActiveSection();
-        isScrollTicking = false;
-      });
-    };
-
-    links.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        const targetId = a.getAttribute('href')?.slice(1) || '';
-        setActiveNavLink(targetId);
-        links.classList.remove('open');
-      });
-    });
-
-    window.addEventListener('scroll', scheduleActiveSectionUpdate, { passive: true });
-    window.addEventListener('resize', scheduleActiveSectionUpdate);
-
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, 80);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-
-    reveals.forEach(el => observer.observe(el));
-
-    // Stagger reveals within the same section
-    document.querySelectorAll('section').forEach(section => {
-      const items = section.querySelectorAll('.reveal');
-      items.forEach((el, i) => {
-        el.style.transitionDelay = `${i * 0.06}s`;
-      });
-    });
-
-    applyTranslations(initialLanguage);
-    updateActiveSection();
-  </script>
+translate(current);
+</script>
 </body>
 </html>
